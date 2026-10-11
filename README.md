@@ -3,20 +3,26 @@
 ## 1. Project Description
 
 The Lab Equipment Booking System is a web-based application developed to manage laboratory equipment and student booking requests. Students can request equipment bookings, while staff members can manage equipment and approve or reject booking requests.
+## 2. Group Members
+  1.A.R.P.T.Bandara- 6251
+  2.M.P.S.Peiris-6308
+  3.H.G.Rathnayaka-6312
+  4.V.I.Chandralal-6302
+  5.N.P.S.T.Wickramasinghe-6317
 
-## 2. Team Members and Module Allocation
+## 3. Team Members and Module Allocation
 
 The project is divided into five modules. Each team member is responsible for the development tasks assigned to their module and also has a coordination role within the team.
 
 | Member | Module | Development Task | Coordination Role |
 |---|---|---|---|
-| Pawani | M5: Approval & Integration | Staff Approval/Reject Page (FR-04) and System Integration | Overall Team Leader |
-| Prabhashi | M1: Accounts & Auth | Student & Staff Login, Registration (FR-00) | Review Lead |
-| Shashinika | M2: Equipment Catalogue | Equipment Listing, Add/Edit/Delete Equipment (FR-01) | Coordinator |
-| Imasha | M3: Booking Form & Model | Booking Request Form & Database Schema (FR-02) | GitHub / CI Lead |
-| Hashini | M4: Booking Validation | Overlapping Logic & Validation Tests (FR-03) | QA Lead |
+| Pawani(PawaniThathsaraniBandara) | M5: Approval & Integration | Staff Approval/Reject Page (FR-04) and System Integration | Overall Team Leader |
+| Prabhashi (asp2023155) | M1: Accounts & Auth | Student & Staff Login, Registration (FR-00) | Review Lead |
+| Shashinika (Shashithathsarani2003) | M2: Equipment Catalogue | Equipment Listing, Add/Edit/Delete Equipment (FR-01) | Coordinator |
+| Imasha (asp2023145) | M3: Booking Form & Model | Booking Request Form & Database Schema (FR-02) | GitHub / CI Lead |
+| Hashini (Hashini-123) | M4: Booking Validation | Overlapping Logic & Validation Tests (FR-03) | QA Lead |
 
-## 3. Module Responsibilities
+## 4. Module Responsibilities
 
 ### M1 – Accounts & Authentication (FR-00)
 **Assigned Member:** Prabhashi
@@ -58,7 +64,7 @@ The project is divided into five modules. Each team member is responsible for th
 - Coordinate the integration of team members' work.
 - Support the final system testing and integration process.
 
-## 4. Coordination Responsibilities
+## 5. Coordination Responsibilities
 
 - **Overall Team Leader – Pawani:** Coordinate the overall project, monitor progress, and support module integration.
 - **Review Lead – Prabhashi:** Coordinate code reviews and help ensure code changes are reviewed before merging.
@@ -66,7 +72,7 @@ The project is divided into five modules. Each team member is responsible for th
 - **GitHub / CI Lead – Imasha:** Manage the GitHub workflow and support the GitHub Actions CI setup.
 - **QA Lead – Hashini:** Coordinate testing, validation, and checking of the system's functionality.
 
-## 5. Technologies Used
+## 6. Technologies Used
 
 - **Programming Language:** Python
 - **Web Framework:** Flask
@@ -76,7 +82,7 @@ The project is divided into five modules. Each team member is responsible for th
 - **Version Control:** Git and GitHub
 - **Continuous Integration:** GitHub Actions
 
-## 6. Team Development Workflow
+## 7. Team Development Workflow
 
 The team will use GitHub to collaborate and manage the project.
 
@@ -89,7 +95,7 @@ The team will use GitHub to collaborate and manage the project.
 - **Code Quality Checks:** Use Ruff to check Python code.
 - **Continuous Integration (CI):** Use GitHub Actions to run automated checks and tests.
 
-## 7. Project Goal
+## 8. Project Goal
 
 The goal of this project is to develop a functional laboratory equipment booking system that supports user authentication, equipment management, booking requests, booking validation, and staff approval/rejection through a collaborative and structured software development process.
 # lab-equipment-booking-system
