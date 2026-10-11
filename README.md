@@ -4,11 +4,12 @@
 
 The Lab Equipment Booking System is a web-based application developed to manage laboratory equipment and student booking requests. Students can request equipment bookings, while staff members can manage equipment and approve or reject booking requests.
 ## 2. Group Members
-  1.A.R.P.T.Bandara- 6251
-  2.M.P.S.Peiris-6308
-  3.H.G.Rathnayaka-6312
-  4.V.I.Chandralal-6302
-  5.N.P.S.T.Wickramasinghe-6317
+
+- A.R.P.T. Bandara - 6251
+- M.P.S. Peiris - 6308
+- H.G. Rathnayaka - 6312
+- V.I. Chandralal - 6302
+- N.P.S.T. Wickramasinghe - 6317
 
 ## 3. Team Members and Module Allocation
 
