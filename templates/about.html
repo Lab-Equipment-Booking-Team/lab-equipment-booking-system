@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block title %}About &amp; Team - Lab Equipment Booking System{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-lg-5 py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Header Card -->
+            <div class="card p-4 p-md-5 mb-4 shadow-sm border-0 bg-white">
+                <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill fw-semibold mb-3 align-self-start">
+                    <i class="bi bi-mortarboard-fill me-1"></i> University Software Engineering Project
+                </span>
+                <h1 class="fw-bold text-navy mb-3">Lab Equipment Booking System</h1>
+                <p class="lead text-secondary mb-4">
+                    A comprehensive web-based platform designed for university scientific laboratories, facilitating efficient resource allocation, conflict-free scheduling, and transparent staff approvals.
+                </p>
+
+                <h4 class="fw-bold text-navy mt-4 mb-3"><i class="bi bi-stack me-2 text-primary"></i>Technology Stack</h4>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="p-3 bg-light rounded-3 border">
+                            <div class="fw-bold text-navy mb-1"><i class="bi bi-server me-1 text-primary"></i> Backend</div>
+                            <small class="text-muted">Python 3.11, Flask 3, Flask-SQLAlchemy, Flask-Login, Werkzeug</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-3 bg-light rounded-3 border">
+                            <div class="fw-bold text-navy mb-1"><i class="bi bi-window me-1 text-info"></i> Frontend</div>
+                            <small class="text-muted">HTML5, CSS3, JavaScript (ES6), Bootstrap 5, Bootstrap Icons</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-3 bg-light rounded-3 border">
+                            <div class="fw-bold text-navy mb-1"><i class="bi bi-check2-all me-1 text-success"></i> Testing &amp; CI</div>
+                            <small class="text-muted">Pytest, pytest-cov, Ruff linter, GitHub Actions CI</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Allocation Section -->
+            <div class="card p-4 p-md-5 mb-4 shadow-sm border-0 bg-white">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="p-3 bg-warning bg-opacity-10 text-warning rounded-3 me-3">
+                        <i class="bi bi-people-fill fs-3"></i>
+                    </div>
+                    <div>
+                        <h3 class="fw-bold text-navy mb-0">Project Team &amp; Module Allocation</h3>
+                        <p class="text-muted small mb-0">Formal assignment responsibilities and coordination leads.</p>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle border">
+                        <thead>
+                            <tr>
+                                <th>Team Member</th>
+                                <th>Assigned Module &amp; Feature</th>
+                                <th>Module ID</th>
+                                <th>Coordination Role</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="fw-bold text-navy">
+                                    <i class="bi bi-person-badge me-1 text-primary"></i> Pawani
+                                </td>
+                                <td>Approval &amp; Integration; Staff Approval/Reject Page and System Integration</td>
+                                <td><span class="badge bg-primary">M5 (FR-04)</span></td>
+                                <td><span class="badge bg-dark">Overall Team Leader</span></td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold text-navy">
+                                    <i class="bi bi-person me-1 text-secondary"></i> Prabhashi
+                                </td>
+                                <td>Accounts &amp; Authentication; Student and Staff Login, Registration</td>
+                                <td><span class="badge bg-info text-dark">M1 (FR-00)</span></td>
+                                <td><span class="badge bg-secondary">Review Lead</span></td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold text-navy">
+                                    <i class="bi bi-person me-1 text-secondary"></i> Shashinika
+                                </td>
+                                <td>Equipment Catalogue; Equipment Listing and Add/Edit/Delete Equipment</td>
+                                <td><span class="badge bg-success">M2 (FR-01)</span></td>
+                                <td><span class="badge bg-secondary">Coordinator</span></td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold text-navy">
+                                    <i class="bi bi-person me-1 text-secondary"></i> Imasha
+                                </td>
+                                <td>Booking Form &amp; Model; Booking Request Form and Database Schema</td>
+                                <td><span class="badge bg-warning text-dark">M3 (FR-02)</span></td>
+                                <td><span class="badge bg-secondary">GitHub / CI Lead</span></td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold text-navy">
+                                    <i class="bi bi-person me-1 text-secondary"></i> Hashini
+                                </td>
+                                <td>Booking Validation; Overlapping Logic and Validation Tests</td>
+                                <td><span class="badge bg-danger">M4 (FR-03)</span></td>
+                                <td><span class="badge bg-secondary">QA Lead</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- System Highlights -->
+            <div class="card p-4 p-md-5 shadow-sm border-0 bg-white">
+                <h4 class="fw-bold text-navy mb-3"><i class="bi bi-shield-check me-2 text-success"></i>Security &amp; Design Principles</h4>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i><strong>Werkzeug Password Hashing:</strong> Passwords are never stored in plain text.</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i><strong>Server-Side RBAC:</strong> Role enforcement via custom decorators protecting all staff and student endpoints.</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i><strong>Integrity Constraints:</strong> Deletion of equipment with historical bookings is strictly prevented.</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i><strong>Discrete Overlap Calculations:</strong> Only true time-range conflicts for approved bookings block slots.</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i><strong>In-Memory Test Database:</strong> Automated tests run without modifying persistent local data.</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i><strong>Automated CI:</strong> GitHub Actions verifies Ruff linting and Pytest coverage on every push.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

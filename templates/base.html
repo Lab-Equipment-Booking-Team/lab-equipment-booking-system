@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Lab Equipment Booking System{% endblock %} - University Laboratory</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="d-flex flex-column min-vh-100 bg-light">
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-navy shadow-sm sticky-top">
+        <div class="container-fluid px-lg-5">
+            <a class="navbar-brand d-flex align-items-center fw-bold" href="{{ url_for('main.index') }}">
+                <i class="bi bi-mortarboard-fill me-2 fs-4 text-warning"></i>
+                <span>UniLab <span class="fw-light text-light-50">Booking</span></span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.index') }}">
+                            <i class="bi bi-house-door me-1"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('equipment.catalogue') }}">
+                            <i class="bi bi-grid me-1"></i> Equipment Catalogue
+                        </a>
+                    </li>
+
+                    {% if current_user.is_authenticated %}
+                        {% if current_user.is_student_member %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('student.dashboard') }}">
+                                    <i class="bi bi-speedometer2 me-1"></i> Dashboard
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('student.create_booking') }}">
+                                    <i class="bi bi-plus-circle me-1"></i> Book Equipment
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('student.my_bookings') }}">
+                                    <i class="bi bi-clock-history me-1"></i> My Bookings
+                                </a>
+                            </li>
+                        {% elif current_user.is_staff_member %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('staff.dashboard') }}">
+                                    <i class="bi bi-speedometer2 me-1"></i> Staff Dashboard
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link position-relative" href="{{ url_for('staff.pending_requests') }}">
+                                    <i class="bi bi-inbox me-1"></i> Pending Requests
+                                    {% if staff_pending_count > 0 %}
+                                        <span class="badge rounded-pill bg-danger ms-1">{{ staff_pending_count }}</span>
+                                    {% endif %}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('staff.manage_equipment') }}">
+                                    <i class="bi bi-tools me-1"></i> Manage Equipment
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('staff.booking_history') }}">
+                                    <i class="bi bi-journal-text me-1"></i> All Bookings
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.about') }}">
+                            <i class="bi bi-info-circle me-1"></i> About & Team
+                        </a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    {% if current_user.is_authenticated %}
+                        <li class="nav-item dropdown me-lg-2">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center text-white" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-person-circle fs-5 me-2"></i>
+                                <span>{{ current_user.full_name }}</span>
+                                <span class="badge ms-2 {{ 'bg-warning text-dark' if current_user.is_staff_member else 'bg-info text-dark' }}">
+                                    {{ 'Staff' if current_user.is_staff_member else 'Student' }}
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                                <li class="dropdown-header text-muted small">
+                                    ID: {{ current_user.student_or_staff_id }}<br>
+                                    @{{ current_user.username }}
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                {% if current_user.is_student_member %}
+                                    <li><a class="dropdown-item" href="{{ url_for('student.dashboard') }}"><i class="bi bi-speedometer2 me-2"></i>My Dashboard</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('student.my_bookings') }}"><i class="bi bi-calendar-check me-2"></i>My Bookings</a></li>
+                                {% else %}
+                                    <li><a class="dropdown-item" href="{{ url_for('staff.dashboard') }}"><i class="bi bi-speedometer2 me-2"></i>Staff Dashboard</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('staff.pending_requests') }}"><i class="bi bi-inbox me-2"></i>Pending Approvals</a></li>
+                                {% endif %}
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item text-danger" href="{{ url_for('auth.logout') }}">
+                                        <i class="bi bi-box-arrow-right me-2"></i>Logout
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item me-2">
+                            <a class="btn btn-outline-light btn-sm px-3" href="{{ url_for('auth.login') }}">
+                                <i class="bi bi-box-arrow-in-right me-1"></i> Log In
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-warning btn-sm px-3 fw-semibold text-dark" href="{{ url_for('auth.register') }}">
+                                <i class="bi bi-person-plus me-1"></i> Register
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    <div class="container-fluid px-lg-5 mt-3">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category if category != 'error' else 'danger' }} alert-dismissible fade show shadow-sm d-flex align-items-center" role="alert">
+                        <i class="bi {% if category == 'success' %}bi-check-circle-fill{% elif category == 'danger' %}bi-exclamation-triangle-fill{% elif category == 'warning' %}bi-exclamation-circle-fill{% else %}bi-info-circle-fill{% endif %} me-2 fs-5"></i>
+                        <div>{{ message }}</div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-grow-1">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-navy text-white-50 py-4 mt-5 border-top border-secondary">
+        <div class="container-fluid px-lg-5">
+            <div class="row gy-3 align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="mb-0 text-white fw-semibold">
+                        <i class="bi bi-mortarboard-fill text-warning me-1"></i> Lab Equipment Booking System
+                    </p>
+                    <small class="text-white-50">University Laboratory Resource Management &amp; Reservation Platform</small>
+                </div>
+                <div class="col-md-6 text-center text-md-end small">
+                    <p class="mb-0 text-white-50">Developed for University Software Engineering</p>
+                    <span class="text-white-50">&copy; {{ current_year }} Laboratory Services. All rights reserved.</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom Application JS -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

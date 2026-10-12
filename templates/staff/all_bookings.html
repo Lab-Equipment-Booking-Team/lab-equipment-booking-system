@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}All Bookings History - Staff Administration{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-lg-5 py-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <div>
+            <h2 class="fw-bold text-navy mb-1"><i class="bi bi-journal-text text-primary me-2"></i>Laboratory Reservation Archive</h2>
+            <p class="text-muted mb-0">Complete audit log of student bookings, approvals, rejections, and equipment utilization.</p>
+        </div>
+        <a href="{{ url_for('staff.dashboard') }}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i> Dashboard
+        </a>
+    </div>
+
+    <!-- Filter Card -->
+    <div class="card p-3 mb-4 shadow-sm border-0">
+        <form method="GET" action="{{ url_for('staff.booking_history') }}" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label for="status" class="form-label small fw-semibold text-muted">Filter by Status</label>
+                <select class="form-select" id="status" name="status">
+                    <option value="">All Statuses</option>
+                    {% for st in statuses %}
+                        <option value="{{ st }}" {% if selected_status == st %}selected{% endif %}>{{ st }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-5">
+                <label for="equipment_id" class="form-label small fw-semibold text-muted">Filter by Equipment</label>
+                <select class="form-select" id="equipment_id" name="equipment_id">
+                    <option value="">All Equipment</option>
+                    {% for eq in all_equipment %}
+                        <option value="{{ eq.id }}" {% if selected_equipment_id == eq.id %}selected{% endif %}>
+                            {{ eq.name }} ({{ eq.code }})
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-3 d-flex gap-2">
+                <button type="submit" class="btn btn-primary flex-grow-1">
+                    <i class="bi bi-funnel me-1"></i> Filter
+                </button>
+                {% if selected_status or selected_equipment_id %}
+                    <a href="{{ url_for('staff.booking_history') }}" class="btn btn-outline-secondary" title="Clear Filters">
+                        <i class="bi bi-x-lg"></i>
+                    </a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+
+    {% if bookings %}
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Ref #</th>
+                                <th>Student</th>
+                                <th>Equipment</th>
+                                <th>Reserved Slot</th>
+                                <th>Qty</th>
+                                <th>Status</th>
+                                <th>Purpose</th>
+                                <th>Evaluation Log</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for b in bookings %}
+                                <tr>
+                                    <td>
+                                        <span class="fw-bold text-navy">#{{ b.id }}</span>
+                                        <div class="text-muted small">{{ b.created_at.strftime('%Y-%m-%d') }}</div>
+                                    </td>
+                                    <td>
+                                        <div class="fw-bold text-navy">{{ b.user.full_name }}</div>
+                                        <small class="text-muted"><code>{{ b.user.student_or_staff_id }}</code></small>
+                                    </td>
+                                    <td>
+                                        <div class="fw-semibold text-navy">{{ b.equipment.name }}</div>
+                                        <small class="text-muted"><code>{{ b.equipment.code }}</code></small>
+                                    </td>
+                                    <td>
+                                        <div><i class="bi bi-calendar3 me-1 text-primary"></i>{{ b.booking_date.strftime('%Y-%m-%d') }}</div>
+                                        <small class="text-muted"><i class="bi bi-clock me-1"></i>{{ b.start_time.strftime('%H:%M') }} &ndash; {{ b.end_time.strftime('%H:%M') }}</small>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-light text-dark border fs-6">{{ b.quantity }}</span>
+                                    </td>
+                                    <td>
+                                        {% if b.status == 'Pending' %}
+                                            <span class="badge badge-status-pending px-3 py-2">Pending</span>
+                                        {% elif b.status == 'Approved' %}
+                                            <span class="badge badge-status-approved px-3 py-2">Approved</span>
+                                        {% elif b.status == 'Rejected' %}
+                                            <span class="badge badge-status-rejected px-3 py-2">Rejected</span>
+                                        {% else %}
+                                            <span class="badge badge-status-cancelled px-3 py-2">Cancelled</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="d-inline-block text-truncate" style="max-width: 220px;" title="{{ b.purpose }}">
+                                            {{ b.purpose }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {% if b.reviewer %}
+                                            <div class="small fw-semibold text-navy">By {{ b.reviewer.full_name }}</div>
+                                            <div class="text-muted small">{{ b.reviewed_at.strftime('%Y-%m-%d %H:%M') if b.reviewed_at else '' }}</div>
+                                            {% if b.rejection_reason %}
+                                                <small class="text-danger d-block"><em>Note: {{ b.rejection_reason }}</em></small>
+                                            {% endif %}
+                                        {% else %}
+                                            <span class="text-muted small">&mdash;</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <i class="bi bi-journal-x empty-state-icon"></i>
+            <h5 class="fw-bold">No Bookings Found</h5>
+            <p class="text-muted">No reservations correspond to the applied filters.</p>
+            <a href="{{ url_for('staff.booking_history') }}" class="btn btn-primary btn-sm">Clear Filters</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

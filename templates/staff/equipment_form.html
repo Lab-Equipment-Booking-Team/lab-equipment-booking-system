@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'Edit Equipment' if is_edit else 'Add New Equipment' }} - Staff Administration{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <nav aria-label="breadcrumb" class="mb-3">
+                <ol class="breadcrumb small">
+                    <li class="breadcrumb-item"><a href="{{ url_for('staff.dashboard') }}">Staff Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url_for('staff.manage_equipment') }}">Manage Equipment</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ 'Edit ' ~ item.code if is_edit else 'Add Equipment' }}</li>
+                </ol>
+            </nav>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4 p-md-5">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="p-3 bg-primary bg-opacity-10 text-primary rounded-circle me-3">
+                            <i class="bi {{ 'bi-pencil-square' if is_edit else 'bi-plus-circle' }} fs-3"></i>
+                        </div>
+                        <div>
+                            <h3 class="fw-bold text-navy mb-0">{{ 'Edit Equipment Details' if is_edit else 'Add New Laboratory Equipment' }}</h3>
+                            <p class="text-muted small mb-0">Enter instrument specifications, category, inventory count, and maintenance status.</p>
+                        </div>
+                    </div>
+
+                    <form method="POST">
+                        <div class="row g-3">
+                            <!-- Equipment Code / ID -->
+                            <div class="col-md-6">
+                                <label for="code" class="form-label">Equipment Code / ID <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="bi bi-upc-scan"></i></span>
+                                    <input type="text" class="form-control" id="code" name="code" value="{{ item.code if is_edit else (request.form.get('code') or '') }}" required placeholder="e.g. EQ-MIC-01">
+                                </div>
+                                <div class="form-text small">Unique institutional inventory code.</div>
+                            </div>
+
+                            <!-- Category -->
+                            <div class="col-md-6">
+                                <label for="category" class="form-label">Category <span class="text-danger">*</span></label>
+                                <select class="form-select" id="category" name="category" required>
+                                    <option value="" disabled {% if not is_edit and not request.form.get('category') %}selected{% endif %}>-- Select Category --</option>
+                                    {% for cat in categories %}
+                                        <option value="{{ cat }}" {% if (is_edit and item.category == cat) or (request.form.get('category') == cat) %}selected{% endif %}>{{ cat }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <!-- Equipment Name -->
+                            <div class="col-12">
+                                <label for="name" class="form-label">Equipment Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="name" name="name" value="{{ item.name if is_edit else (request.form.get('name') or '') }}" required placeholder="e.g. Olympus BX53 Biological Fluorescence Microscope">
+                            </div>
+
+                            <!-- Quantity Available -->
+                            <div class="col-md-6">
+                                <label for="quantity_available" class="form-label">Quantity Available <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="bi bi-boxes"></i></span>
+                                    <input type="number" class="form-control" id="quantity_available" name="quantity_available" min="1" max="500" value="{{ item.quantity_available if is_edit else (request.form.get('quantity_available') or 1) }}" required>
+                                </div>
+                                <div class="form-text small">Total operable instruments of this model.</div>
+                            </div>
+
+                            <!-- Status -->
+                            <div class="col-md-6">
+                                <label for="status" class="form-label">Equipment Status <span class="text-danger">*</span></label>
+                                <select class="form-select" id="status" name="status" required>
+                                    {% for st in statuses %}
+                                        <option value="{{ st }}" {% if (is_edit and item.status == st) or (request.form.get('status') == st) or (not is_edit and st == 'Available') %}selected{% endif %}>
+                                            {{ st }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                <div class="form-text small">Only "Available" items can be reserved by students.</div>
+                            </div>
+
+                            <!-- Description -->
+                            <div class="col-12">
+                                <label for="description" class="form-label">Description &amp; Technical Specifications</label>
+                                <textarea class="form-control" id="description" name="description" rows="4" placeholder="Enter instrument specifications, magnification, wavelength range, safety warnings, etc...">{{ item.description if is_edit else (request.form.get('description') or '') }}</textarea>
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="d-flex justify-content-between align-items-center pt-4 border-top mt-4">
+                            <a href="{{ url_for('staff.manage_equipment') }}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-1"></i> Back to Inventory
+                            </a>
+                            <button type="submit" class="btn btn-primary px-4 fw-semibold">
+                                <i class="bi bi-check2-circle me-1"></i> {{ 'Save Changes' if is_edit else 'Add Equipment' }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

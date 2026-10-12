@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}Equipment Catalogue - Lab Equipment Booking System{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-lg-5 py-4">
+    <!-- Header with Action -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <div>
+            <h2 class="fw-bold text-navy mb-1"><i class="bi bi-grid-3x3-gap-fill text-warning me-2"></i>Laboratory Equipment Catalogue</h2>
+            <p class="text-muted mb-0">Browse university research instruments, check availability, and submit booking requests.</p>
+        </div>
+        {% if current_user.is_authenticated and current_user.is_staff_member %}
+            <a href="{{ url_for('staff.add_equipment') }}" class="btn btn-primary fw-semibold">
+                <i class="bi bi-plus-lg me-1"></i> Add New Equipment
+            </a>
+        {% endif %}
+    </div>
+
+    <!-- Search & Filter Controls -->
+    <div class="card p-3 mb-4 shadow-sm border-0">
+        <form method="GET" action="{{ url_for('equipment.catalogue') }}" class="row g-3 align-items-end">
+            <div class="col-md-5">
+                <label for="q" class="form-label small fw-semibold text-muted">Search Instruments</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="bi bi-search text-muted"></i></span>
+                    <input type="text" class="form-control" id="q" name="q" value="{{ query_text }}" placeholder="Search by name, ID code, or specifications...">
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <label for="category" class="form-label small fw-semibold text-muted">Category</label>
+                <select class="form-select" id="category" name="category">
+                    <option value="">All Categories</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>{{ cat }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label for="status" class="form-label small fw-semibold text-muted">Availability</label>
+                <select class="form-select" id="status" name="status">
+                    <option value="">All Statuses</option>
+                    <option value="Available" {% if selected_status == 'Available' %}selected{% endif %}>Available</option>
+                    <option value="Under Maintenance" {% if selected_status == 'Under Maintenance' %}selected{% endif %}>Under Maintenance</option>
+                    <option value="Decommissioned" {% if selected_status == 'Decommissioned' %}selected{% endif %}>Decommissioned</option>
+                </select>
+            </div>
+
+            <div class="col-md-2 d-flex gap-2">
+                <button type="submit" class="btn btn-primary flex-grow-1">
+                    <i class="bi bi-funnel me-1"></i> Filter
+                </button>
+                {% if query_text or selected_category or selected_status %}
+                    <a href="{{ url_for('equipment.catalogue') }}" class="btn btn-outline-secondary" title="Clear Filters">
+                        <i class="bi bi-x-lg"></i>
+                    </a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+
+    <!-- Equipment Results -->
+    {% if equipment_list %}
+        <div class="row g-4">
+            {% for item in equipment_list %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 card-hover">
+                        <div class="card-body d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <span class="badge bg-secondary bg-opacity-10 text-secondary border small">{{ item.category }}</span>
+                                {% if item.status == 'Available' %}
+                                    <span class="badge badge-status-available"><i class="bi bi-check-circle me-1"></i>Available</span>
+                                {% elif item.status == 'Under Maintenance' %}
+                                    <span class="badge badge-status-maintenance"><i class="bi bi-wrench me-1"></i>Under Maintenance</span>
+                                {% else %}
+                                    <span class="badge badge-status-decommissioned"><i class="bi bi-slash-circle me-1"></i>Decommissioned</span>
+                                {% endif %}
+                            </div>
+
+                            <h5 class="card-title fw-bold text-navy mb-1">{{ item.name }}</h5>
+                            <div class="text-muted small mb-3">ID: <code>{{ item.code }}</code></div>
+
+                            <p class="card-text text-secondary small flex-grow-1">
+                                {{ item.description or 'Specialized laboratory equipment for student practicals and research projects.' }}
+                            </p>
+
+                            <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-2">
+                                <span class="small fw-semibold text-muted">
+                                    <i class="bi bi-boxes me-1"></i>Total Units: <strong>{{ item.quantity_available }}</strong>
+                                </span>
+
+                                <div class="btn-group">
+                                    <a href="{{ url_for('equipment.detail', equipment_id=item.id) }}" class="btn btn-sm btn-outline-secondary">
+                                        Specs
+                                    </a>
+                                    {% if current_user.is_authenticated and current_user.is_student_member %}
+                                        {% if item.is_operational %}
+                                            <a href="{{ url_for('student.create_booking', equipment_id=item.id) }}" class="btn btn-sm btn-primary">
+                                                <i class="bi bi-calendar-plus me-1"></i>Book
+                                            </a>
+                                        {% else %}
+                                            <button class="btn btn-sm btn-secondary" disabled>Unavailable</button>
+                                        {% endif %}
+                                    {% elif current_user.is_authenticated and current_user.is_staff_member %}
+                                        <a href="{{ url_for('staff.edit_equipment', equipment_id=item.id) }}" class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-pencil me-1"></i>Edit
+                                        </a>
+                                    {% else %}
+                                        <a href="{{ url_for('auth.login') }}" class="btn btn-sm btn-outline-primary">
+                                            Sign in to Book
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <i class="bi bi-search empty-state-icon"></i>
+            <h5 class="fw-bold">No Equipment Found</h5>
+            <p class="text-muted">No laboratory equipment matches your current search criteria or category filter.</p>
+            <a href="{{ url_for('equipment.catalogue') }}" class="btn btn-sm btn-primary mt-2">Clear Filters</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

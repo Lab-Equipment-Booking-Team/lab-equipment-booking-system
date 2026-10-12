@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+
+{% block title %}Home - University Lab Equipment Booking System{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section text-white mb-5 shadow">
+    <div class="container-fluid px-lg-5">
+        <div class="row align-items-center py-4">
+            <div class="col-lg-7">
+                <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-semibold mb-3">
+                    <i class="bi bi-shield-check me-1"></i> Official University Portal
+                </span>
+                <h1 class="display-4 fw-bold mb-3">University Laboratory Equipment Booking System</h1>
+                <p class="lead text-light mb-4 opacity-90">
+                    Streamlined reservations for research and coursework equipment. Students can easily browse available instruments, reserve time slots, and monitor booking status in real-time. Staff manage inventory and approvals seamlessly.
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="{{ url_for('equipment.catalogue') }}" class="btn btn-warning btn-lg px-4 fw-semibold text-dark shadow-sm">
+                        <i class="bi bi-search me-2"></i> Browse Equipment
+                    </a>
+                    {% if not current_user.is_authenticated %}
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-lg px-4 shadow-sm">
+                            <i class="bi bi-box-arrow-in-right me-2"></i> Log In
+                        </a>
+                        <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg px-4 text-navy fw-semibold shadow-sm">
+                            <i class="bi bi-person-plus me-2"></i> Student Sign Up
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline-light btn-lg px-4 shadow-sm">
+                            <i class="bi bi-speedometer2 me-2"></i> Open My Dashboard
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-5 d-none d-lg-block text-center">
+                <div class="p-4 bg-white bg-opacity-10 rounded-4 border border-white border-opacity-25 shadow-lg backdrop-blur">
+                    <i class="bi bi-mortarboard-fill display-1 text-warning mb-3 d-block"></i>
+                    <h4 class="text-white fw-bold">Faculty of Science &amp; Engineering</h4>
+                    <p class="text-white-50 small mb-0">High-precision laboratory instrumentation booking with conflict prevention &amp; approval workflows.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Overview Metrics -->
+<div class="container-fluid px-lg-5 mb-5">
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card p-3 h-100 stat-card stat-equipment">
+                <div class="d-flex align-items-center">
+                    <div class="p-3 bg-primary bg-opacity-10 text-primary rounded-3 me-3">
+                        <i class="bi bi-cpu fs-2"></i>
+                    </div>
+                    <div>
+                        <div class="text-muted small fw-semibold text-uppercase">Total Lab Equipment</div>
+                        <h2 class="fw-bold mb-0">{{ total_equipment }}</h2>
+                        <small class="text-success"><i class="bi bi-check-circle me-1"></i>{{ available_equipment }} Operational</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-3 h-100 stat-card stat-approved">
+                <div class="d-flex align-items-center">
+                    <div class="p-3 bg-success bg-opacity-10 text-success rounded-3 me-3">
+                        <i class="bi bi-calendar-check fs-2"></i>
+                    </div>
+                    <div>
+                        <div class="text-muted small fw-semibold text-uppercase">Smart Conflict Checks</div>
+                        <h4 class="fw-bold mb-0">Time-Overlap Logic</h4>
+                        <small class="text-muted">Prevents overbooking automatically</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-3 h-100 stat-card stat-pending">
+                <div class="d-flex align-items-center">
+                    <div class="p-3 bg-warning bg-opacity-10 text-warning rounded-3 me-3">
+                        <i class="bi bi-shield-lock fs-2"></i>
+                    </div>
+                    <div>
+                        <div class="text-muted small fw-semibold text-uppercase">Role-Based Access</div>
+                        <h4 class="fw-bold mb-0">Student &amp; Staff</h4>
+                        <small class="text-muted">Server-side route protection</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Featured Equipment Section -->
+<div class="container-fluid px-lg-5 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold text-navy mb-1"><i class="bi bi-stars text-warning me-2"></i>Featured Lab Instruments</h3>
+            <p class="text-muted mb-0">Explore frequently reserved laboratory equipment available for students.</p>
+        </div>
+        <a href="{{ url_for('equipment.catalogue') }}" class="btn btn-outline-primary btn-sm">
+            View Full Catalogue <i class="bi bi-arrow-right ms-1"></i>
+        </a>
+    </div>
+
+    {% if featured_equipment %}
+        <div class="row g-4">
+            {% for item in featured_equipment %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 card-hover">
+                        <div class="card-body d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <span class="badge bg-secondary bg-opacity-10 text-secondary border small">{{ item.category }}</span>
+                                <span class="badge badge-status-available"><i class="bi bi-check-circle me-1"></i>Available</span>
+                            </div>
+                            <h5 class="card-title fw-bold text-navy mb-1">{{ item.name }}</h5>
+                            <div class="text-muted small mb-3">ID: <code>{{ item.code }}</code></div>
+                            <p class="card-text text-secondary small flex-grow-1">
+                                {{ item.description or 'Specialized laboratory instrument for advanced coursework and research.' }}
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-2">
+                                <span class="small fw-semibold text-muted">
+                                    <i class="bi bi-box me-1"></i>{{ item.quantity_available }} Available
+                                </span>
+                                {% if current_user.is_authenticated and current_user.is_student_member %}
+                                    <a href="{{ url_for('student.create_booking', equipment_id=item.id) }}" class="btn btn-sm btn-primary">
+                                        Book Now <i class="bi bi-arrow-right ms-1"></i>
+                                    </a>
+                                {% else %}
+                                    <a href="{{ url_for('equipment.detail', equipment_id=item.id) }}" class="btn btn-sm btn-outline-secondary">
+                                        View Specs <i class="bi bi-chevron-right ms-1"></i>
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <i class="bi bi-box-seam empty-state-icon"></i>
+            <h5 class="fw-bold">No Equipment Listed Yet</h5>
+            <p class="text-muted">The lab equipment catalogue is currently being populated.</p>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Workflow Steps -->
+<div class="container-fluid px-lg-5 mb-5">
+    <div class="bg-white p-4 p-lg-5 rounded-4 border shadow-sm">
+        <h3 class="fw-bold text-navy text-center mb-4">How The Booking Workflow Works</h3>
+        <div class="row g-4 text-center">
+            <div class="col-md-3">
+                <div class="p-3">
+                    <div class="rounded-circle bg-primary bg-opacity-10 text-primary d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                        <i class="bi bi-search fs-3"></i>
+                    </div>
+                    <h5 class="fw-bold">1. Select Equipment</h5>
+                    <p class="text-muted small">Search the catalogue by category and check real-time availability.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-3">
+                    <div class="rounded-circle bg-info bg-opacity-10 text-info d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                        <i class="bi bi-calendar-event fs-3"></i>
+                    </div>
+                    <h5 class="fw-bold">2. Submit Request</h5>
+                    <p class="text-muted small">Choose your date, time slot, requested quantity, and project purpose.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-3">
+                    <div class="rounded-circle bg-warning bg-opacity-10 text-warning d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                        <i class="bi bi-check2-circle fs-3"></i>
+                    </div>
+                    <h5 class="fw-bold">3. Staff Verification</h5>
+                    <p class="text-muted small">Staff reviews pending requests and approves or rejects with reason.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-3">
+                    <div class="rounded-circle bg-success bg-opacity-10 text-success d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                        <i class="bi bi-award fs-3"></i>
+                    </div>
+                    <h5 class="fw-bold">4. Conduct Experiment</h5>
+                    <p class="text-muted small">Track your approval in real time and access the laboratory on schedule.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
