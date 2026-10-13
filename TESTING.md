@@ -15,3 +15,9 @@ This document records the automated tests implemented using `pytest` and `pytest
 | T06 | FR-03: Past booking start time | Reject | Validation Rule | Pass |
 | T07 | FR-03: Equipment Out of service | Reject | Status Check | Pass |
 | T08 | FR-03: Overlapping booking times | Reject | Overlap Logic | Pass |
+
+## How to Run Tests
+1. Activate the virtual environment:
+   `venv\Scripts\activate`
+2. Run pytest with coverage:
+   `pytest --cov=app`
