@@ -1,5 +1,7 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
 from datetime import datetime
+
+from flask import Blueprint, flash, redirect, render_template, request, url_for
+
 from app import db
 from app.models import Booking, Equipment
 

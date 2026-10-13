@@ -1,5 +1,7 @@
 from datetime import datetime
+
 from app import db
+
 
 # 1. User Model (පරිශීලකයින් සඳහා)
 class User(db.Model):
