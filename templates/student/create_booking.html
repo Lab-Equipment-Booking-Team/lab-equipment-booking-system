@@ -30,6 +30,8 @@
                         <span>The start time must be strictly earlier than the end time.</span>
                     </div>
 
+                    <div id="availabilityBadge" class="alert d-none py-2 px-3 mb-3 small" role="alert"></div>
+
                     <form id="bookingForm" method="POST" action="{{ url_for('student.create_booking') }}">
                         <!-- Equipment Selection -->
                         <div class="mb-3">

@@ -173,3 +173,25 @@ body {
     border-color: #3b82f6;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
 }
+
+.btn-navy {
+    background-color: var(--navy-primary);
+    border-color: var(--navy-primary);
+    color: #ffffff;
+}
+
+.btn-navy:hover, .btn-navy:focus {
+    background-color: var(--navy-secondary);
+    border-color: var(--navy-secondary);
+    color: #ffffff;
+}
+
+.toggle-password-btn {
+    border-color: #cbd5e1;
+    color: var(--text-secondary);
+}
+
+.toggle-password-btn:hover {
+    background-color: #f1f5f9;
+    color: var(--text-primary);
+}

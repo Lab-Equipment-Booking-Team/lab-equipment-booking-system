@@ -71,7 +71,7 @@ ruff check .
 
 ## 3. Test Coverage Summary
 
-The automated test suite achieves **94% overall codebase coverage** across **48 automated test cases**.
+The automated test suite achieves **94% overall codebase coverage** across **53 automated test cases**.
 
 | Test Module | Focus Area | Requirement ID | Tests | Status |
 |---|---|---|---|---|
@@ -82,7 +82,8 @@ The automated test suite achieves **94% overall codebase coverage** across **48 
 | `test_approval.py` | Staff Request Approval, Rejection with Feedback Notes, Approval Time Re-Verification, State Transition Guards | **FR-04 (M5)** | 5 | PASSED |
 | `test_models.py` | User, Equipment, and Booking ORM Models, Integrity Constraints, Foreign Keys & Relationships | **All Modules** | 3 | PASSED |
 | `test_cli_and_integration.py` | CLI Commands (`init-db`, `create-staff`, `seed-data`), Main Routes, Availability JSON API, 404 Handlers | **M1 & M5** | 7 | PASSED |
-| **Total** | **Complete System Test Suite** | **All FRs** | **48** | **100% PASS** |
+| `test_assets_and_templates.py` | CSS/JS Static Delivery, `url_for('static')` Linkage Verification, Bootstrap 5 Asset Loading | **Frontend & UI** | 5 | PASSED |
+| **Total** | **Complete System Test Suite** | **All Modules** | **53** | **100% PASS** |
 
 ---
 
