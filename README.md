@@ -20,7 +20,7 @@ The project is divided into five modules. Each team member is responsible for th
 | Pawani(PawaniThathsaraniBandara) | M5: Approval & Integration | Staff Approval/Reject Page (FR-04) and System Integration | Overall Team Leader |
 | Prabhashi (asp2023155) | M1: Accounts & Auth | Student & Staff Login, Registration (FR-00) | Review Lead |
 | Shashinika (Shashithathsarani2003) | M2: Equipment Catalogue | Equipment Listing, Add/Edit/Delete Equipment (FR-01) | Coordinator |
-| Imasha (asp2023145) | M3: Booking Form & Model | Booking Request Form & Database Schema (FR-02) | GitHub / CI Lead |
+| Imasha (asp2023143) | M3: Booking Form & Model | Booking Request Form & Database Schema (FR-02) | GitHub / CI Lead |
 | Hashini (Hashini-123) | M4: Booking Validation | Overlapping Logic & Validation Tests (FR-03) | QA Lead |
 
 ## 4. Module Responsibilities
