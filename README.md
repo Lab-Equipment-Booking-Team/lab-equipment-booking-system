@@ -99,5 +99,6 @@ The team will use GitHub to collaborate and manage the project.
 ## 8. Project Goal
 
 The goal of this project is to develop a functional laboratory equipment booking system that supports user authentication, equipment management, booking requests, booking validation, and staff approval/rejection through a collaborative and structured software development process.
+
 # lab-equipment-booking-system
 Web-based Lab Equipment Booking System
