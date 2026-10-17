@@ -61,11 +61,17 @@ def test_main_routes_and_dashboard_redirection(
     # About page
     res_about = client.get("/about")
     assert res_about.status_code == 200
-    assert b"Pawani" in res_about.data
-    assert b"Prabhashi" in res_about.data
-    assert b"Shashinika" in res_about.data
-    assert b"Imasha" in res_about.data
-    assert b"Hashini" in res_about.data
+    assert b"About the System" in res_about.data
+    assert b"Purpose and Objectives" in res_about.data
+    assert b"Key Features" in res_about.data
+    assert b"How It Works" in res_about.data
+    assert b"System Benefits" in res_about.data
+    # Verify no team member names or team table are present
+    assert b"Pawani" not in res_about.data
+    assert b"Prabhashi" not in res_about.data
+    assert b"Shashinika" not in res_about.data
+    assert b"Imasha" not in res_about.data
+    assert b"Hashini" not in res_about.data
 
     # Unauthenticated dashboard redirect -> /auth/login
     res_dash_anon = client.get("/dashboard", follow_redirects=False)

@@ -36,7 +36,7 @@ def index():
 
 @main_bp.route("/about")
 def about():
-    """About laboratory system and project team allocation."""
+    """About laboratory system, objectives, features, and workflow guide."""
     return render_template("about.html")
 
 

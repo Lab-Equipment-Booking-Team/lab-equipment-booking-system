@@ -135,6 +135,8 @@ flask run --host=127.0.0.1 --port=5000
 ```
 Open your browser and navigate to: **`http://127.0.0.1:5000`**
 
+> **Using VS Code:** This is a Flask application, so opening an HTML template with **Go Live** will not render its Jinja templates or run the backend. Install dependencies and initialize the database as described above, then choose **Terminal → Run Task → Run Lab Equipment Booking System**. Once the Flask server starts, open **`http://127.0.0.1:5000`** in your browser.
+
 ### Pre-Seeded Demo Accounts
 | Role | Username | Password | Notes |
 |---|---|---|---|
