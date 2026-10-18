@@ -11,9 +11,9 @@ def create_app():
 
     db.init_app(app)
 
-    # Database tables automatically create karanna meka add kala
+
     with app.app_context():
-        from app.models import Booking
+        import app.models  # noqa: F401
 
         db.create_all()
 
