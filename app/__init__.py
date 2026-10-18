@@ -8,16 +8,18 @@ def create_app():
     app = Flask(__name__)
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///lab_booking.db"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config["SECRET_KEY"] = "dev-secret-key"
 
     db.init_app(app)
 
     with app.app_context():
-        import app.models
+        # app.models වල තියෙන Models ටික Load කරගැනීමට:
+        from . import models  # noqa: F401
 
         db.create_all()
 
-    # Import routes/views inside to avoid circular imports
-    from app.views import main as main_bp
+    # Views/Routes Register කිරීම:
+    from .views import main as main_bp
 
     app.register_blueprint(main_bp)
 
