@@ -16,5 +16,10 @@ def create_app():
         from app.views import bp as main_bp
         app.register_blueprint(main_bp)
         db.create_all()
+<<<<<<< HEAD
 
     return app
+=======
+        
+    return app
+>>>>>>> main

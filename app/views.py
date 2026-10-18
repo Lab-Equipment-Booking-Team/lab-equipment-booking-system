@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 
 bp = Blueprint('main', __name__)
@@ -17,3 +18,10 @@ def register():
     if request.method == 'POST':
         return redirect(url_for('main.login'))
     return render_template('register.html')
+=======
+from flask import current_app as app, render_template
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+>>>>>>> main
