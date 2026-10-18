@@ -13,8 +13,7 @@ def create_app():
     db.init_app(app)
 
     with app.app_context():
-       
-        from . import models  
+        from . import models
 
         db.create_all()
 
