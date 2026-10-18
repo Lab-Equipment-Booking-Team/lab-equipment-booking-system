@@ -13,7 +13,7 @@ def create_app():
 
 
     with app.app_context():
-        import app.models  # noqa: F401
+        import app.models
 
         db.create_all()
 
