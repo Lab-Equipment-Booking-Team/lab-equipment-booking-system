@@ -13,10 +13,7 @@ def create_app():
 
     # Database tables automatically create karanna meka add kala
     with app.app_context():
-        from app.models import (  # Models import karanna one tables create wenna
-            Booking,
-            Equipment,
-        )
+        from app.models import Booking
 
         db.create_all()
 
