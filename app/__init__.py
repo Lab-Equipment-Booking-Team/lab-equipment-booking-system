@@ -1,14 +1,10 @@
 from flask import Flask
 
+# Create Flask app
+app = Flask(__name__)
 
-def create_app():
-  app = Flask(__name__)
+# Import Blueprint from views.py
+from app.views import bp
 
-  app.config['SECRET_KEY'] = 'your-secret-key-here'
-
-  # Register Blueprints
-  from app.views import bp as main_bp
-
-  app.register_blueprint(main_bp)
-
-  return app
+# Register Blueprint
+app.register_blueprint(bp)
