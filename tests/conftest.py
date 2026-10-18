@@ -2,7 +2,8 @@ import pytest
 
 from app import create_app
 from config import TestingConfig
-from models import Equipment, User, db
+from database.database import db
+from modules.M3_booking_form_model.models import Equipment, User
 
 
 @pytest.fixture

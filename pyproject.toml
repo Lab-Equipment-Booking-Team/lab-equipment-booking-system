@@ -1,0 +1,16 @@
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = [
+    "E501",  # Line length handled gracefully
+    "N999",  # Allow custom university module folder names like M1_accounts_auth
+]
+
+[tool.pytest.ini_options]
+testpaths = ["modules", "tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+addopts = "-v"

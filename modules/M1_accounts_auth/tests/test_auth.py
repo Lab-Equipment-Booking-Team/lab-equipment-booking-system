@@ -1,4 +1,4 @@
-from models import User
+from modules.M3_booking_form_model.models import User
 from tests.conftest import login_client
 
 

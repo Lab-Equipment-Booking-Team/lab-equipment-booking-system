@@ -1,6 +1,7 @@
 from datetime import date, time
 
-from models import Booking, Equipment, db
+from database.database import db
+from modules.M3_booking_form_model.models import Booking, Equipment
 from tests.conftest import login_client
 
 

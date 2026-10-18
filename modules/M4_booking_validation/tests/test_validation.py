@@ -1,9 +1,13 @@
+"""Unit and integration tests for Module M4 – Booking Validation & QA.
+
+Assigned to: Hashini Wickramasinghe (Student ID: 6317, GitHub: Hashini-123)
+"""
+
 from datetime import date, datetime, time, timedelta
 
-from models import Booking, db
-from utils.validators import (
-    validate_booking_request,
-)
+from database.database import db
+from modules.M3_booking_form_model.models import Booking
+from modules.M4_booking_validation.validation import validate_booking_request
 
 
 def test_no_conflict_on_different_dates(app, sample_equipment, student_user):

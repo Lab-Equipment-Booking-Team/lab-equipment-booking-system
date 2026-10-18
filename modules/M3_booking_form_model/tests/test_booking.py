@@ -1,6 +1,7 @@
 from datetime import date, time, timedelta
 
-from models import Booking, db
+from database.database import db
+from modules.M3_booking_form_model.models import Booking
 from tests.conftest import login_client
 
 

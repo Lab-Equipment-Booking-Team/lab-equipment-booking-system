@@ -1,10 +1,24 @@
+"""Server-side booking validation and capacity conflict checking.
+
+Assigned to: Module M4 – Booking Validation & QA
+Member: Hashini Wickramasinghe (Student ID: 6317, GitHub: Hashini-123)
+
+Business Rules:
+1. Start time must be strictly earlier than end time.
+2. Past dates and times cannot be booked.
+3. Equipment must exist and be operational ('Available').
+4. Requested quantity must be a positive integer and not exceed total inventory.
+5. Overlapping approved bookings must not exceed the available quantity.
+   Two intervals [s1, e1) and [s2, e2) overlap if: s1 < e2 and e1 > s2.
+"""
+
 from datetime import date, datetime, time
 
-from models import Booking, Equipment
+from modules.M3_booking_form_model.models import Booking, Equipment
 
 
 def parse_date(date_str: str) -> date | None:
-    """Safely parse YYYY-MM-DD date string."""
+    """Safely parse YYYY-MM-DD date string. Returns date or None."""
     try:
         return datetime.strptime(date_str.strip(), "%Y-%m-%d").date()
     except (ValueError, AttributeError):
@@ -12,7 +26,7 @@ def parse_date(date_str: str) -> date | None:
 
 
 def parse_time(time_str: str) -> time | None:
-    """Safely parse HH:MM (24-hour) time string."""
+    """Safely parse HH:MM (24-hour) time string. Returns time or None."""
     try:
         return datetime.strptime(time_str.strip(), "%H:%M").time()
     except (ValueError, AttributeError):
@@ -27,7 +41,8 @@ def get_conflicting_approved_bookings(
     exclude_booking_id: int | None = None,
 ) -> list[Booking]:
     """Retrieve all approved bookings on the same date that overlap with the time range.
-    Two intervals [s1, e1) and [s2, e2) overlap if:
+
+    Interval overlap rule: Two intervals [s1, e1) and [s2, e2) overlap if:
     s1 < e2 and e1 > s2.
     """
     query = Booking.query.filter(

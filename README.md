@@ -1,180 +1,239 @@
 # Lab Equipment Booking System
 
-An enterprise-grade, modular web application built for university laboratories to streamline equipment reservation workflows, prevent scheduling conflicts, and manage inventory approvals between students and laboratory staff.
+An enterprise-grade, modular web application built with **Python 3.11** and **Flask** for university laboratories. The system streamlines laboratory equipment reservations, eliminates double-booking conflicts through mathematical interval validation, and provides administrative oversight for lab staff.
 
-Developed as a university Software Engineering project following modern software development, testing, and continuous integration standards.
-
----
-
-## 1. Project Overview
-
-In university research and teaching laboratories, high-demand precision instruments (microscopes, spectrophotometers, centrifuges, oscilloscopes) require careful scheduling. This system eliminates manual paperwork and prevents double-booking through:
-
-- **Role-Based Access Control (RBAC):** Distinct interfaces and server-side route protections for **Student** and **Staff** accounts.
-- **Dynamic Catalogue & Inventory:** Searchable and filterable instrument directory with status tracking.
-- **Intelligent Time-Slot Overlap Prevention:** Server-side mathematical validation ensuring that approved concurrent reservations never exceed available instrument quantities.
-- **Staff Approval Workflow:** Queue for staff to inspect project justifications and approve or reject reservations with feedback.
-- **Full Traceability:** Preserves historical reservation records by preventing the deletion of active or past-booked equipment.
+Developed as a collaborative university Software Engineering project organized into five cleanly separated, independent modules.
 
 ---
 
-## 2. Technology Stack
+## 1. Group Members & Module Allocation
 
-| Layer | Technologies |
-|---|---|
-| **Backend** | Python 3.11+, Flask 3.1, Flask-SQLAlchemy 3.1, Flask-Login 0.6, Werkzeug 3.1 |
-| **Frontend** | HTML5, CSS3, JavaScript (ES6+), Bootstrap 5.3, Bootstrap Icons |
-| **Database** | SQLite with SQLAlchemy ORM (file-based dev, in-memory test) |
-| **Testing** | Pytest 9.1, pytest-cov 7.1 |
-| **Code Quality** | Ruff 0.17 |
-| **Version Control & CI** | Git, GitHub, GitHub Actions |
+| Module | Title | Member | Student ID | GitHub Username | Key Responsibilities |
+|---|---|---|---|---|---|
+| **M1** | Accounts & Authentication | **Prabhashi Peiris** | 6308 | `asp2023155` | Registration, login, logout, password hashing, session management, RBAC decorators, auth tests. |
+| **M2** | Equipment Catalogue | **Shashinika Rathnayaka** | 6312 | `Shashithathsarani2003` | Equipment catalogue listing, category filters, search, equipment CRUD, availability API, deletion safety checks, equipment tests. |
+| **M3** | Booking Form & Model | **Imasha Chandralal** | 6302 | `asp2023145` | Booking form, equipment selection, date/time inputs, booking creation, Pending status, ORM models (`models.py`), booking tests. |
+| **M4** | Booking Validation & QA | **Hashini Wickramasinghe** | 6317 | `Hashini-123` | Date/time validation, past booking rejection, overlapping interval conflict checks, peak capacity calculation, validation tests, `TESTING.md`. |
+| **M5** | Approval & Integration | **Pawani Thathsarani Bandara** | 6251 | Overall Lead | Staff dashboard, pending requests queue, approve/reject workflow with reason logging, system integration, end-to-end tests. |
 
----
-
-## 3. Team Members & Module Allocation
-
-| Team Member | Module & Feature Responsibility | Module ID | Coordination Role |
-|---|---|---|---|
-| **Pawani** | **Approval & Integration:** Staff Approval/Reject Page (FR-04) and System Integration | **M5 (FR-04)** | **Overall Team Leader** |
-| **Prabhashi** | **Accounts & Authentication:** Student and Staff Login, Registration (FR-00) | **M1 (FR-00)** | **Review Lead** |
-| **Shashinika** | **Equipment Catalogue:** Equipment Listing and Add/Edit/Delete Equipment (FR-01) | **M2 (FR-01)** | **Coordinator** |
-| **Imasha** | **Booking Form & Model:** Booking Request Form and Database Schema (FR-02) | **M3 (FR-02)** | **GitHub / CI Lead** |
-| **Hashini** | **Booking Validation:** Overlapping Logic and Validation Tests (FR-03) | **M4 (FR-03)** | **QA Lead** |
+For detailed module boundaries, file ownership, and collaboration protocols, refer to [docs/MODULE_ALLOCATION.md](file:///C:/Users/PAWANI/.gemini/antigravity/scratch/lab-equipment-booking-system/docs/MODULE_ALLOCATION.md).
 
 ---
 
-## 4. System Architecture & Features
+## 2. Project Architecture & Modular Folder Structure
 
-### Module M1 – Accounts & Authentication (FR-00)
-- **Role Distinction:** Students and Staff.
-- **Secure Public Registration:** Public registration creates strictly `Student` accounts. Users cannot self-grant Staff privileges.
-- **Safe Staff Creation:** Staff accounts are created securely via the documented CLI command (`flask create-staff`) or with a designated staff authorization key.
-- **Password Security:** Salted hashes generated and verified via Werkzeug (`generate_password_hash` / `check_password_hash`).
-- **Session Protection:** Managed via Flask-Login with custom decorators (`@staff_required`, `@student_required`).
+The project is organized so each group member can develop, test, and maintain their assigned module independently without code collisions:
 
-### Module M2 – Equipment Catalogue (FR-01)
-- **Catalogue Display:** Responsive card and table layouts showing equipment ID code, name, category, quantity, and status.
-- **Search & Filters:** Real-time search by keyword and filtering by category and status (`Available`, `Under Maintenance`, `Decommissioned`).
-- **Staff Inventory Control:** Authorized staff can add new instruments and edit specifications.
-- **Referential Integrity Protection:** Equipment cannot be deleted if existing booking records reference it, protecting audit trails.
-
-### Module M3 – Booking Form & Model (FR-02)
-- **Student Reservation Portal:** Students select equipment, booking date, start time, end time, requested quantity, and purpose.
-- **Relational Data Model:** Normalized SQLite tables linking `User`, `Equipment`, and `Booking`.
-- **Student Dashboard:** Track personal reservation history with statuses: `Pending`, `Approved`, `Rejected`, `Cancelled`.
-
-### Module M4 – Booking Validation & Capacity Engine (FR-03)
-- **Interval Overlap Validation:** Two intervals `[start_1, end_1)` and `[start_2, end_2)` on the same date overlap if and only if `start_1 < end_2 and end_1 > start_2`. Adjacent time slots (e.g. 09:00–10:00 and 10:00–11:00) do not conflict.
-- **Capacity Calculations:** Calculates peak concurrently booked quantities across all overlapping approved bookings to ensure available capacity is not exceeded.
-- **Past Date/Time Prevention:** Rejects past dates and past times on the current day.
-- **Time Inversion Prevention:** Rejects submissions where `start_time >= end_time`.
-
-### Module M5 – Approval Workflow & System Integration (FR-04)
-- **Staff Review Dashboard:** Dedicated interface displaying pending student requests, applicant details, and experiment justification.
-- **Approval Re-Verification:** Re-evaluates capacity at approval time to guard against concurrent conflicting pending requests.
-- **Constructive Rejection:** Allows staff to log feedback reasons viewable by students.
-- **State Transition Guard:** Prevents illegal state transitions (e.g., re-approving a rejected request).
+```
+lab-equipment-booking-system/
+├── app.py                         # Application factory & CLI commands
+├── config.py                      # Development, Testing, Production configurations
+├── conftest.py                    # Root pytest discovery proxy
+├── pyproject.toml                 # Ruff & Pytest configuration
+├── requirements.txt               # Project dependencies
+├── README.md                      # Project documentation
+├── .gitignore                     # Git ignore rules
+│
+├── modules/
+│   ├── M1_accounts_auth/          # Assigned to: Prabhashi Peiris (6308)
+│   │   ├── routes.py              # Auth Blueprint (/auth/register, /auth/login, /auth/logout)
+│   │   ├── service.py             # User authentication & registration service
+│   │   ├── decorators.py          # @staff_required and @student_required decorators
+│   │   ├── templates/auth/        # login.html, register.html
+│   │   └── tests/                 # test_auth.py
+│   │
+│   ├── M2_equipment_catalogue/    # Assigned to: Shashinika Rathnayaka (6312)
+│   │   ├── routes.py              # Equipment Blueprint (/equipment, /equipment/<id>, API)
+│   │   ├── service.py             # Catalogue search, filter, and equipment CRUD service
+│   │   ├── templates/equipment/   # catalogue.html, detail.html
+│   │   └── tests/                 # test_equipment.py
+│   │
+│   ├── M3_booking_form_model/     # Assigned to: Imasha Chandralal (6302)
+│   │   ├── routes.py              # Student Booking Blueprint (/student/dashboard, /student/book, etc.)
+│   │   ├── service.py             # Booking submission service (uses M4 validation)
+│   │   ├── models.py              # User, Equipment, and Booking ORM database models
+│   │   ├── templates/student/     # create_booking.html, my_bookings.html, dashboard.html
+│   │   └── tests/                 # test_booking.py, test_models.py
+│   │
+│   ├── M4_booking_validation/     # Assigned to: Hashini Wickramasinghe (6317)
+│   │   ├── validation.py          # Pure validation algorithms (interval overlap, capacity check)
+│   │   ├── service.py             # Validation services consumed by M2, M3, and M5
+│   │   └── tests/                 # test_validation.py
+│   │
+│   └── M5_approval_integration/   # Assigned to: Pawani Thathsarani Bandara (6251)
+│       ├── routes.py              # Staff Blueprint (/staff/dashboard, /staff/requests/pending, etc.)
+│       ├── service.py             # Staff approval, rejection, and metrics calculation service
+│       ├── templates/staff/       # dashboard.html, pending_requests.html, all_bookings.html, etc.
+│       └── tests/                 # test_approval.py
+│
+├── database/
+│   ├── __init__.py
+│   └── database.py                # Central shared SQLAlchemy db instance & utcnow()
+│
+├── templates/                     # Root shared layouts
+│   ├── base.html                  # Master navbar, alerts, responsive grid, footer
+│   ├── index.html                 # Public landing page
+│   ├── about.html                 # System Overview & Guide
+│   └── errors/                    # 403.html, 404.html, 500.html
+│
+├── static/
+│   ├── css/style.css              # Custom university navy/gold responsive stylesheet
+│   ├── js/script.js               # Dynamic client-side scripts & live availability calculator
+│   └── images/                    # Image assets
+│
+├── tests/                         # Shared integration & end-to-end tests
+│   ├── conftest.py                # Shared fixtures (app, client, runner, users)
+│   ├── test_assets_and_templates.py # Static file and CSS/JS linkage tests
+│   └── test_cli_and_integration.py  # CLI commands and whole-application routing tests
+│
+└── docs/
+    ├── MODULE_ALLOCATION.md       # Team responsibilities & collaboration guide
+    └── TESTING.md                 # Complete testing strategy & coverage report
+```
 
 ---
 
-## 5. Installation & Setup Instructions
+## 3. Technology Stack
 
-### Prerequisites
-- Python 3.11 or later
-- Git
+- **Backend**: Python 3.11+, Flask 3.1
+- **Database**: SQLite with Flask-SQLAlchemy 3.1
+- **Authentication**: Flask-Login 0.6 & Werkzeug 3.1 salted hashing
+- **Frontend**: HTML5, CSS3, JavaScript (ES6+), Bootstrap 5.3, Bootstrap Icons
+- **Testing**: Pytest 9.1, pytest-cov 7.1 (**53 tests, 95% coverage**)
+- **Code Quality**: Ruff 0.17 linter
+- **Continuous Integration**: GitHub Actions (`.github/workflows/ci.yml`)
+
+---
+
+## 4. Quickstart Installation & Setup
 
 ### Step 1: Clone the Repository
 ```bash
-git clone https://github.com/<your-username>/lab-equipment-booking-system.git
+git clone https://github.com/pawani-bandara/lab-equipment-booking-system.git
 cd lab-equipment-booking-system
 ```
 
-### Step 2: Create and Activate Virtual Environment
-**On Windows (PowerShell):**
+### Step 2: Create & Activate Virtual Environment
+**Windows (PowerShell):**
 ```powershell
 python -m venv venv
 .\venv\Scripts\Activate.ps1
 ```
 
-**On Linux / macOS:**
+**Linux / macOS:**
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 ```
 
-### Step 3: Install Required Dependencies
+### Step 3: Install Dependencies
 ```bash
-pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
----
-
-## 6. How to Run the Application
-
-### Step 1: Initialize Database & Seed Demo Data
-Initialize the database tables and populate realistic university equipment and demo accounts:
+### Step 4: Initialize Database & Seed Demo Data
 ```bash
+# 1. Initialize SQLite database tables
 flask init-db
+
+# 2. Seed realistic equipment, demo staff, students, and bookings
 flask seed-data
 ```
 
-### Step 2: (Optional) Create a Custom Staff Administrator
-To create an administrative Staff account via the secure CLI command:
-```bash
-flask create-staff --username staff_admin --email admin@university.edu --name "Dr. Sarah Johnson" --staff-id "STF-0101"
-```
-
-### Step 3: Start the Development Server
+### Step 5: Run the Development Server
 ```bash
 python app.py
 ```
-Or with Flask CLI:
-```bash
-flask run --host=127.0.0.1 --port=5000
-```
 Open your browser and navigate to: **`http://127.0.0.1:5000`**
 
-> **Using VS Code:** This is a Flask application, so opening an HTML template with **Go Live** will not render its Jinja templates or run the backend. Install dependencies and initialize the database as described above, then choose **Terminal → Run Task → Run Lab Equipment Booking System**. Once the Flask server starts, open **`http://127.0.0.1:5000`** in your browser.
+---
 
-### Pre-Seeded Demo Accounts
-| Role | Username | Password | Notes |
+## 5. Pre-Configured Demo Accounts
+
+| Role | Username | Password | Access Privileges |
 |---|---|---|---|
-| **Staff** | `staff_admin` | `StaffPass123!` | Full staff inventory and approval access |
-| **Student** | `student_alex` | `StudentPass123!` | Student reservation access |
-| **Student** | `student_maya` | `StudentPass123!` | Secondary student account for multi-user testing |
+| **Staff Administrator** | `staff_admin` | `StaffPass123!` | Equipment inventory CRUD, pending request approval/rejection queue, full booking archive. |
+| **Student (Primary)** | `student_alex` | `StudentPass123!` | Equipment catalogue viewing, booking request creation, personal booking history tracking. |
+| **Student (Secondary)** | `student_maya` | `StudentPass123!` | Additional student account for testing multi-user concurrent capacity scenarios. |
 
 ---
 
-## 7. How to Run Tests and Code Quality Checks
+## 6. Running Tests & Quality Verification
 
-### Run Automated Pytest Suite
+### Run the Complete Automated Test Suite (53 Tests)
 ```bash
-pytest
+python -m pytest
 ```
 
-### Run Tests with Coverage Reporting
+### Run Module-Specific Test Suites
 ```bash
-pytest --cov=. --cov-report=term-missing
+# M1: Accounts & Authentication
+python -m pytest modules/M1_accounts_auth/tests/
+
+# M2: Equipment Catalogue
+python -m pytest modules/M2_equipment_catalogue/tests/
+
+# M3: Booking Form & Models
+python -m pytest modules/M3_booking_form_model/tests/
+
+# M4: Booking Validation
+python -m pytest modules/M4_booking_validation/tests/
+
+# M5: Staff Approval & Integration
+python -m pytest modules/M5_approval_integration/tests/
+
+# Shared Integration Tests
+python -m pytest tests/
 ```
 
-### Run Ruff Linter
+### Run with Coverage Analysis
 ```bash
-ruff check .
+python -m pytest --cov=. --cov-report=term-missing
+```
+
+### Run Code Quality Linter (Ruff)
+```bash
+python -m ruff check .
 ```
 
 ---
 
-## 8. GitHub Collaboration Workflow
+## 7. How the Modules Work Together
 
-The development team uses standard GitHub Feature Branching and pull request reviews:
+```
+                  ┌───────────────────────────────┐
+                  │            app.py             │
+                  │   (Factory & ChoiceLoader)    │
+                  └──────┬─────────────────┬──────┘
+                         │                 │
+           ┌─────────────┴────────┐  ┌─────┴──────────────┐
+           │                      │  │                    │
+┌──────────▼──────────┐ ┌─────────▼──▼────────┐ ┌─────────▼───────────┐
+│ M1: Accounts & Auth │ │ M2: Equip Catalogue │ │ M3: Booking Form    │
+│  - User Login/Reg   │ │  - Search & Filters │ │  - Booking Request  │
+│  - Session & RBAC   │ │  - Equipment CRUD   │ │  - User/Eq/Bk Model │
+└──────────┬──────────┘ └─────────┬───────────┘ └─────────┬───────────┘
+           │                      │                       │
+           │                      │      Validates via    │
+           │                      │     ┌─────────────────▼───────────┐
+           │                      └────►│   M4: Booking Validation    │
+           │                            │  - Interval overlap check   │
+           │                            │  - Peak capacity check      │
+           │                            │  - Past date/time rejection │
+           │                            └─────────────────┬───────────┘
+           │                                              │
+           │   Re-validates capacity on approval          │
+           └──────────────────────┬───────────────────────┘
+                                  │
+                        ┌─────────▼───────────┐
+                        │ M5: Staff Approval  │
+                        │  - Approve / Reject │
+                        │  - System Integrate │
+                        └─────────────────────┘
+```
 
-1. **Main Branch Protection:** The `main` branch contains verified, production-ready code. Direct commits are restricted.
-2. **Feature Branches:** Each module is developed on a dedicated branch:
-   - `feature/m1-accounts-auth` (Prabhashi)
-   - `feature/m2-equipment-catalogue` (Shashinika)
-   - `feature/m3-booking-model` (Imasha)
-   - `feature/m4-validation-tests` (Hashini)
-   - `feature/m5-approval-integration` (Pawani)
-3. **Continuous Integration:** Every push and pull request triggers the GitHub Actions CI pipeline (`.github/workflows/ci.yml`) to run Ruff lint checks and Pytest with test coverage.
-4. **Peer Review:** Pull requests must pass CI and be approved by the designated Review Lead before merging.
+1. **Shared Database & Models**: The single central database instance resides in [database/database.py](file:///C:/Users/PAWANI/.gemini/antigravity/scratch/lab-equipment-booking-system/database/database.py). Canonical models reside in [modules/M3_booking_form_model/models.py](file:///C:/Users/PAWANI/.gemini/antigravity/scratch/lab-equipment-booking-system/modules/M3_booking_form_model/models.py).
+2. **M3 Uses M4 Validation**: When a student submits a reservation in M3, `modules.M3_booking_form_model.service.create_student_booking()` directly calls `modules.M4_booking_validation.service.validate_booking_submission()` to check operational availability, interval syntax, and overlapping capacity limits before persisting with status `Pending`.
+3. **M5 Integrates M3 Bookings**: In M5, staff inspect pending bookings created by M3. When approving, `modules.M5_approval_integration.service.approve_booking_request()` re-verifies capacity using M4 to prevent concurrent capacity violations, then calls `booking.approve(staff_user)`.
+4. **M5 Integrates M2 Equipment CRUD**: Staff inventory management routes in M5 call `modules.M2_equipment_catalogue.service` functions (`add_equipment`, `update_equipment`, `delete_equipment`), preserving M2's referential deletion safety checks.
+5. **Role-Based Access Control**: Protected views across student and staff routes utilize decorators (`@staff_required`, `@student_required`) defined in M1.

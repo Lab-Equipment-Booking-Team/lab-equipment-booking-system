@@ -1,6 +1,7 @@
 from datetime import date, time
 
-from models import Booking, Equipment, User, db
+from database.database import db
+from modules.M3_booking_form_model.models import Booking, Equipment, User
 
 
 def test_user_model_operations(app):

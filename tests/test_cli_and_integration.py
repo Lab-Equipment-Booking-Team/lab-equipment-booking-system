@@ -1,4 +1,4 @@
-from models import Booking, Equipment, User
+from modules.M3_booking_form_model.models import Booking, Equipment, User
 from tests.conftest import login_client
 
 

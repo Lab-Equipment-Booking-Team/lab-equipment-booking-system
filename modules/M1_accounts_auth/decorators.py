@@ -1,3 +1,11 @@
+"""Role-based access control (RBAC) decorators.
+
+Assigned to: Module M1 – Accounts & Authentication
+Member: Prabhashi Peiris (Student ID: 6308, GitHub: asp2023155)
+
+Protects student and staff routes on the server side.
+"""
+
 from functools import wraps
 
 from flask import abort, flash, redirect, request, url_for

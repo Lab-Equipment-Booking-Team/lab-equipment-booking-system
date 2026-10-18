@@ -1,13 +1,30 @@
+"""Lab Equipment Booking System - Main Application Entry Point.
+
+Central Flask application factory and CLI commands integrating all five modules:
+- Module M1: Accounts & Authentication (Prabhashi Peiris)
+- Module M2: Equipment Catalogue (Shashinika Rathnayaka)
+- Module M3: Booking Form & Model (Imasha Chandralal)
+- Module M4: Booking Validation & QA (Hashini Wickramasinghe)
+- Module M5: Approval & Integration (Pawani Thathsarani Bandara)
+"""
+
 import os
 from datetime import UTC, date, datetime, time
 
 import click
-from flask import Flask, render_template
+import jinja2
+from flask import Blueprint, Flask, redirect, render_template, url_for
 from flask_login import LoginManager, current_user
 
 from config import Config, config_by_name
-from models import Booking, Equipment, User, db
+from database.database import db
+from modules.M1_accounts_auth.routes import auth_bp
+from modules.M2_equipment_catalogue.routes import equipment_bp
+from modules.M3_booking_form_model.models import Booking, Equipment, User
+from modules.M3_booking_form_model.routes import bookings_bp
+from modules.M5_approval_integration.routes import staff_bp
 
+# Flask-Login session manager
 login_manager = LoginManager()
 login_manager.login_view = "auth.login"
 login_manager.login_message = "Please log in to access this page."
@@ -16,7 +33,56 @@ login_manager.login_message_category = "warning"
 
 @login_manager.user_loader
 def load_user(user_id):
+    """Load user object for Flask-Login session management."""
     return db.session.get(User, int(user_id))
+
+
+# Main public routes blueprint (Home, About, Dashboard redirect)
+main_bp = Blueprint("main", __name__)
+
+
+@main_bp.route("/")
+def index():
+    """Public landing page featuring equipment overview and quick portals."""
+    total_equipment = Equipment.query.count()
+    available_equipment = Equipment.query.filter_by(
+        status=Equipment.STATUS_AVAILABLE
+    ).count()
+    categories = [
+        c[0]
+        for c in Equipment.query.with_entities(Equipment.category)
+        .distinct()
+        .all()
+    ]
+    featured_equipment = (
+        Equipment.query.filter_by(status=Equipment.STATUS_AVAILABLE)
+        .limit(6)
+        .all()
+    )
+
+    return render_template(
+        "index.html",
+        total_equipment=total_equipment,
+        available_equipment=available_equipment,
+        categories=categories,
+        featured_equipment=featured_equipment,
+    )
+
+
+@main_bp.route("/about")
+def about():
+    """About laboratory system, objectives, features, and workflow guide."""
+    return render_template("about.html")
+
+
+@main_bp.route("/dashboard")
+def dashboard():
+    """Convenience redirect to user's role-specific dashboard."""
+    if not current_user.is_authenticated:
+        return redirect(url_for("auth.login"))
+    if current_user.is_staff_member:
+        return redirect(url_for("staff.dashboard"))
+    return redirect(url_for("student.dashboard"))
 
 
 def create_app(config_class=None):
@@ -35,24 +101,32 @@ def create_app(config_class=None):
     except OSError:
         pass
 
-    # Initialize extensions
+    # Configure Jinja ChoiceLoader to discover templates across all modules and root
+    template_paths = [
+        os.path.join(app.root_path, "templates"),
+        os.path.join(app.root_path, "modules", "M1_accounts_auth", "templates"),
+        os.path.join(app.root_path, "modules", "M2_equipment_catalogue", "templates"),
+        os.path.join(app.root_path, "modules", "M3_booking_form_model", "templates"),
+        os.path.join(app.root_path, "modules", "M5_approval_integration", "templates"),
+    ]
+    app.jinja_loader = jinja2.ChoiceLoader([
+        app.jinja_loader,
+        jinja2.FileSystemLoader(template_paths),
+    ])
+
+    # Initialize extensions with central shared database
     db.init_app(app)
     login_manager.init_app(app)
 
-    # Register blueprints
-    from routes.auth import auth_bp
-    from routes.bookings import bookings_bp
-    from routes.equipment import equipment_bp
-    from routes.main import main_bp
-    from routes.staff import staff_bp
-
+    # Register blueprints from integrated modules
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(equipment_bp)
     app.register_blueprint(bookings_bp)
+
     app.register_blueprint(staff_bp)
 
-    # Register error handlers
+    # Register HTTP error handlers
     @app.errorhandler(403)
     def forbidden_error(error):
         return render_template("errors/403.html"), 403
@@ -66,7 +140,7 @@ def create_app(config_class=None):
         db.session.rollback()
         return render_template("errors/500.html"), 500
 
-    # Context processors for templates
+    # Global context processors for navigation badges and dynamic year
     @app.context_processor
     def inject_global_data():
         staff_pending_count = 0
@@ -79,14 +153,14 @@ def create_app(config_class=None):
             "staff_pending_count": staff_pending_count,
         }
 
-    # Register custom CLI commands
+    # Register CLI management commands
     register_commands(app)
 
     return app
 
 
 def register_commands(app: Flask):
-    """Register custom CLI management commands."""
+    """Register custom CLI management commands for database initialization and seeding."""
 
     @app.cli.command("init-db")
     def init_db_command():
