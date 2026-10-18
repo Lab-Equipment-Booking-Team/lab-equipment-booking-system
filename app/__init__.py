@@ -13,12 +13,11 @@ def create_app():
     db.init_app(app)
 
     with app.app_context():
-        # app.models වල තියෙන Models ටික Load කරගැනීමට:
-        from . import models  # noqa: F401
+       
+        from . import models  
 
         db.create_all()
 
-    # Views/Routes Register කිරීම:
     from .views import main as main_bp
 
     app.register_blueprint(main_bp)
