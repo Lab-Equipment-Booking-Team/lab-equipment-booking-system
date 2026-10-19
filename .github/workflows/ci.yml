@@ -27,7 +27,5 @@ jobs:
       run: |
         ruff check .
 
-    - - name: Run Tests with Pytest
-      env:
-        PYTHONPATH: .
-      run: pytest --cov=app
+    - - - name: Run Tests with Pytest
+      run: python -m pytest --cov=app
