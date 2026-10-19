@@ -11,7 +11,7 @@ def create_app():
 
     db.init_app(app)
 
-    # Blueprints Import සහ Register කිරීම
+    # Blueprints Import & Register 
     from app.auth import auth_bp
     from app.bookings import bookings_bp
     from app.equipment import equipment_bp
@@ -19,5 +19,9 @@ def create_app():
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(bookings_bp, url_prefix='/bookings')
     app.register_blueprint(equipment_bp, url_prefix='/equipment')
+
+    @app.route("/")
+    def home():
+        return "Lab Equipment Booking System is running!"
 
     return app
