@@ -20,8 +20,8 @@ def create_app():
     app.register_blueprint(bookings_bp, url_prefix='/bookings')
     app.register_blueprint(equipment_bp, url_prefix='/equipment')
 
-@app.route("/")
+    @app.route("/")
     def home():
         return "Lab Equipment Booking System is running!"
-        
+
     return app
