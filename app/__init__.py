@@ -3,23 +3,21 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-
 def create_app():
     app = Flask(__name__)
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///lab_booking.db"
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.config["SECRET_KEY"] = "dev-secret-key"
+    app.config['SECRET_KEY'] = 'your-secret-key'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../instance/lab_booking.db'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)
 
-    with app.app_context():
-        from . import models  # noqa: F401
-    
+    # Blueprints Import සහ Register කිරීම
+    from app.auth import auth_bp
+    from app.bookings import bookings_bp
+    from app.equipment import equipment_bp
 
-        db.create_all()
-
-    from .views import main as main_bp
-
-    app.register_blueprint(main_bp)
+    app.register_blueprint(auth_bp, url_prefix='/auth')
+    app.register_blueprint(bookings_bp, url_prefix='/bookings')
+    app.register_blueprint(equipment_bp, url_prefix='/equipment')
 
     return app
