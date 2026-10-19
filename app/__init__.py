@@ -13,10 +13,16 @@ def create_app():
     db.init_app(app)
 
     with app.app_context():
-        from . import models  # noqa: F401
-    
+        from .models import Equipment
 
         db.create_all()
+
+        if not Equipment.query.first():
+            e1 = Equipment(name="Microscope", category="Biology")
+            e2 = Equipment(name="Centrifuge", category="Chemistry")
+            e3 = Equipment(name="Oscilloscope", category="Physics")
+            db.session.add_all([e1, e2, e3])
+            db.session.commit()
 
     from .views import main as main_bp
 
