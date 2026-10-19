@@ -1,9 +1,9 @@
 from datetime import datetime
-
+from flask_login import UserMixin
 from app import db
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = "user"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -35,4 +35,4 @@ class Booking(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
-        return f"<Booking {self.id} - Equipment {self.equipment_id} ({self.status})>"
+        return f"<Booking {self.id} Equipment {self.equipment_id} ({self.status})>"

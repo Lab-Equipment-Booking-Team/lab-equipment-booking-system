@@ -1,7 +1,9 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 
 db = SQLAlchemy()
+login_manager = LoginManager()
 
 
 def create_app():
@@ -11,15 +13,20 @@ def create_app():
     app.config["SECRET_KEY"] = "dev-secret-key"
 
     db.init_app(app)
+    
+   
+    login_manager.init_app(app)
+    login_manager.login_view = "main.login"
 
     with app.app_context():
         from . import models  # noqa: F401
-    
-
         db.create_all()
 
-    from .views import main as main_bp
+    @login_manager.user_loader
+    def load_user(user_id):
+        return models.User.query.get(int(user_id))
 
+    from .views import main as main_bp
     app.register_blueprint(main_bp)
 
     return app
