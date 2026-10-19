@@ -1,5 +1,6 @@
 from datetime import datetime
 
+<<<<<<< HEAD
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 
 from app import db
@@ -98,3 +99,24 @@ def book_equipment():
 
     equipment_list = Equipment.query.all()
     return render_template("book.html", equipment_list=equipment_list)
+=======
+# Create Blueprint
+bp = Blueprint('main', __name__)
+
+# Home page route
+@bp.route('/')
+def index():
+    return render_template('index.html')
+
+# Login page route
+@bp.route('/login')
+def login():
+    return render_template('login.html')
+
+# Register page route
+@bp.route('/register')
+def register():
+    return render_template('register.html')
+
+print("Blueprint routes loaded")
+>>>>>>> 48617da513e0727f9725f538a8b00ca198f6f16c

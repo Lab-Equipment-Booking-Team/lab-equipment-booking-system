@@ -5,7 +5,10 @@ from flask_login import LoginManager
 db = SQLAlchemy()
 login_manager = LoginManager()
 
+# Create Flask app
+app = Flask(__name__)
 
+<<<<<<< HEAD
 def create_app():
     app = Flask(__name__)
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///lab_booking.db"
@@ -30,3 +33,10 @@ def create_app():
     app.register_blueprint(main_bp)
 
     return app
+=======
+# Import Blueprint from views.py
+from app.views import bp
+
+# Register Blueprint
+app.register_blueprint(bp)
+>>>>>>> 48617da513e0727f9725f538a8b00ca198f6f16c
