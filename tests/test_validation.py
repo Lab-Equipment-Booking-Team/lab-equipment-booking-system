@@ -1,9 +1,9 @@
 """Unit and integration tests for Module M4 - Booking Validation & QA."""
 
-import sys
 import os
+import sys
 import types
-from datetime import datetime, date, time
+from datetime import date, datetime, time
 
 # 1. Setup mock database module before importing app models
 dummy_db_module = types.ModuleType("database")
