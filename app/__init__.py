@@ -24,6 +24,7 @@ def create_app(test_config=None):
     login_manager.init_app(app)
 
     from app import models
+    # Blueprints Import & Register 
     from app.auth import auth_bp
     from app.bookings import bookings_bp
     from app.equipment import equipment_bp
@@ -49,6 +50,10 @@ def create_app(test_config=None):
     @app.errorhandler(401)
     def unauthorized_error(error):
         return render_template("errors/401.html"), 401
+
+    @app.route("/")
+    def home():
+        return "Lab Equipment Booking System is running!"
 
     @app.route("/")
     def home():
