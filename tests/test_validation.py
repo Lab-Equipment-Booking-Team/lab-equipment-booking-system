@@ -3,6 +3,7 @@
 import sys
 import os
 import types
+from datetime import datetime, date, time
 
 # 1. Setup mock database module before importing app models
 dummy_db_module = types.ModuleType("database")
@@ -20,7 +21,7 @@ PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
-from datetime import datetime, date, time
+
 
 # 3. Validation rule checker (FR-03 Boundary & Rules)
 def validate_booking_request(equipment_id, booking_date, start_time, end_time, quantity, purpose):
