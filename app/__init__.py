@@ -13,12 +13,10 @@ def create_app():
     db.init_app(app)
 
     with app.app_context():
-        from . import models  
-        
+        from .models import Equipment
+
         db.create_all()
 
-        
-        from .models import Equipment
         if not Equipment.query.first():
             e1 = Equipment(name="Microscope", category="Biology")
             e2 = Equipment(name="Centrifuge", category="Chemistry")
