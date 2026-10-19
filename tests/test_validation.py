@@ -5,6 +5,8 @@ import sys
 import types
 from datetime import date, datetime, time
 
+from flask_sqlalchemy import SQLAlchemy
+
 # 1. Setup mock database module before importing app models
 dummy_db_module = types.ModuleType("database")
 dummy_database_submodule = types.ModuleType("database.database")
