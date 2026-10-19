@@ -55,8 +55,4 @@ def create_app(test_config=None):
     def home():
         return "Lab Equipment Booking System is running!"
 
-    @app.route("/")
-    def home():
-        return "Lab Equipment Booking System is running!"
-
     return app
