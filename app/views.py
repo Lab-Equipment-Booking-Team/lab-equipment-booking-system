@@ -98,3 +98,9 @@ def book_equipment():
 
     equipment_list = Equipment.query.all()
     return render_template("book.html", equipment_list=equipment_list)
+
+# 5. FR-01: Equipment Catalogue Route
+@main.route("/equipment")
+def equipment_list():
+    equipments = Equipment.query.all()
+    return render_template("equipment.html", equipments=equipments)
