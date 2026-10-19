@@ -1,14 +1,26 @@
 """Unit and integration tests for Module M4 - Booking Validation & QA."""
 
+<<<<<<< HEAD
 import sys
 import os
 import types
+=======
+import os
+import sys
+import types
+from datetime import date, datetime, time
+
+from flask_sqlalchemy import SQLAlchemy
+>>>>>>> 40711bc472ab28a39ac8ec507e12fe2216bb99fa
 
 # 1. Setup mock database module before importing app models
 dummy_db_module = types.ModuleType("database")
 dummy_database_submodule = types.ModuleType("database.database")
+<<<<<<< HEAD
 
 from flask_sqlalchemy import SQLAlchemy
+=======
+>>>>>>> 40711bc472ab28a39ac8ec507e12fe2216bb99fa
 dummy_database_submodule.db = SQLAlchemy()
 dummy_db_module.database = dummy_database_submodule
 
@@ -20,7 +32,11 @@ PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
+<<<<<<< HEAD
 from datetime import datetime, date, time, timedelta
+=======
+
+>>>>>>> 40711bc472ab28a39ac8ec507e12fe2216bb99fa
 
 # 3. Validation rule checker (FR-03 Boundary & Rules)
 def validate_booking_request(equipment_id, booking_date, start_time, end_time, quantity, purpose):

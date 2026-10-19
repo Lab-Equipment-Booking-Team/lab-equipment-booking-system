@@ -15,15 +15,32 @@
         </select><br><br>
 
         <label>Booking Date:</label><br>
-        <input type="date" name="booking_date" required><br><br>
+        <input type="date" id="booking_date" name="booking_date" required><br><br>
 
         <label>Start Time:</label><br>
-        <input type="time" name="start_time" required><br><br>
+        <input type="time" id="start_time" name="start_time" required><br><br>
 
         <label>End Time:</label><br>
-        <input type="time" name="end_time" required><br><br>
+        <input type="time" id="end_time" name="end_time" required><br><br>
 
         <button type="submit">Submit Booking Request</button>
     </form>
+
+    
+    <script>
+        
+        const today = new Date().toISOString().split('T')[0];
+        const dateInput = document.getElementById('booking_date');
+        
+        dateInput.value = today; 
+        dateInput.min = today;   
+
+        
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        
+        document.getElementById('start_time').value = `${hours}:${minutes}`;
+    </script>
 </body>
 </html>
