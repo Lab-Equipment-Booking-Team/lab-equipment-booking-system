@@ -84,6 +84,15 @@ def create_booking():
 
         if error_msg:
             flash(error_msg, "danger")
+            if new_booking is not None:
+                # Booking was persisted as Rejected — send student to their history.
+                flash(
+                    "Your booking request has been automatically rejected and saved. "
+                    "You can view the reason in your booking history.",
+                    "warning",
+                )
+                return redirect(url_for("student.my_bookings"))
+            # Not enough data to persist — re-render the form so the student can fix it.
             return render_template(
                 "student/create_booking.html",
                 equipment_list=all_equipment,
