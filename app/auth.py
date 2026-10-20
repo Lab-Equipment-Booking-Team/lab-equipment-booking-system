@@ -1,7 +1,4 @@
-from flask import Blueprint
-
-<<<<<<< HEAD
-auth_bp = Blueprint('auth', __name__)import re
+import re
 from functools import wraps
 from urllib.parse import urlsplit
 
@@ -290,6 +287,3 @@ def dashboard():
 def staff_dashboard():
     """Protected staff-only view demonstrating role restriction."""
     return render_template("auth/staff_dashboard.html", user=current_user)
-=======
-auth_bp = Blueprint('auth', __name__)
->>>>>>> 0894d5065e76ac158d8ee2704fa4148393525d7f

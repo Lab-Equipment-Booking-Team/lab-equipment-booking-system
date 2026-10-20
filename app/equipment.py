@@ -1,7 +1,4 @@
-from flask import Blueprint
-
-<<<<<<< HEAD
-equipment_bp = Blueprint('equipment', __name__)from flask import (
+from flask import (
     Blueprint,
     flash,
     redirect,
@@ -151,6 +148,3 @@ def delete_equipment(equipment_id):
     db.session.commit()
     flash("Equipment deleted.", "info")
     return redirect(url_for("equipment.list_equipment"))
-=======
-equipment_bp = Blueprint('equipment', __name__)
->>>>>>> 0894d5065e76ac158d8ee2704fa4148393525d7f
