@@ -1,15 +1,3 @@
-<<<<<<< HEAD
-# Code Review Checklist
-
-- [ ] User inputs are validated.
-- [ ] Business rules and conditions are correct.
-- [ ] Database operations are appropriate.
-- [ ] Login and role restrictions are checked.
-- [ ] Errors are handled appropriately.
-- [ ] No passwords or secret values are committed.
-- [ ] Relevant automated tests have been added.
-- [ ] Existing tests still pass.
-=======
 # Code Review Checklist (REVIEW_CHECKLIST.md)
 
 This checklist outlines the formal code review criteria for all Pull Requests and module deliverables in the **Lab Equipment Booking System** project. Every team member must verify these checkpoints prior to approving pull requests.
@@ -72,4 +60,3 @@ This checklist outlines the formal code review criteria for all Pull Requests an
 - [ ] **Automated Testing:** Pytest test suite executes without failures and maintains >= 90% code coverage.
 - [ ] **Hermetic Tests:** Automated tests run against an in-memory SQLite database without modifying local development database files.
 - [ ] **GitHub Actions:** CI workflow completes successfully on push and pull request events.
->>>>>>> bb65f6993f366d1677e41c35990b582a2073cecc
