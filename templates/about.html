@@ -1,0 +1,450 @@
+{% extends "base.html" %}
+
+{% block title %}About the System - Lab Equipment Booking System{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-lg-5 py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10 col-xl-9">
+
+            <!-- Breadcrumb Navigation -->
+            <nav aria-label="breadcrumb" class="mb-3">
+                <ol class="breadcrumb small">
+                    <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}" class="text-decoration-none">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">About the System</li>
+                </ol>
+            </nav>
+
+            <!-- Guide Header / Hero Card (Inspired by reference guide header) -->
+            <header class="card p-4 p-md-5 mb-4 border-0 shadow-sm bg-white position-relative overflow-hidden">
+                <div class="position-relative z-1">
+                    <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+                        <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill fw-semibold">
+                            <i class="bi bi-mortarboard-fill me-1"></i> University Laboratory Operations
+                        </span>
+                        <span class="badge bg-light text-secondary border px-3 py-2 rounded-pill small">
+                            <i class="bi bi-book me-1"></i> System Architecture &amp; Guide
+                        </span>
+                    </div>
+
+                    <h1 class="display-6 fw-bold text-navy mb-3">Lab Equipment Booking System</h1>
+                    <p class="lead text-secondary mb-4">
+                        A modern, web-based platform designed to simplify scientific equipment reservations, eliminate scheduling conflicts, and establish transparent approval workflows for university teaching and research laboratories.
+                    </p>
+
+                    <!-- Quick Metadata Strip -->
+                    <div class="d-flex flex-wrap gap-4 pt-3 border-top text-muted small">
+                        <div><i class="bi bi-check2-circle text-success me-1"></i> Self-Service Booking</div>
+                        <div><i class="bi bi-shield-check text-primary me-1"></i> Role-Based Access</div>
+                        <div><i class="bi bi-clock-history text-warning me-1"></i> Real-Time Conflict Prevention</div>
+                        <div><i class="bi bi-laptop text-info me-1"></i> Fully Responsive</div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Quick Navigation Strip (Jump to Sections) -->
+            <nav aria-label="Page navigation" class="mb-4">
+                <div class="card p-2 border-0 shadow-sm bg-white">
+                    <div class="d-flex flex-wrap gap-2 align-items-center justify-content-center justify-content-md-start px-2">
+                        <span class="text-muted small fw-semibold text-uppercase me-2"><i class="bi bi-list-nested me-1"></i> Jump To:</span>
+                        <a href="#about-system" class="btn btn-sm btn-outline-secondary rounded-pill px-3">About the System</a>
+                        <a href="#purpose-objectives" class="btn btn-sm btn-outline-secondary rounded-pill px-3">Purpose &amp; Objectives</a>
+                        <a href="#key-features" class="btn btn-sm btn-outline-secondary rounded-pill px-3">Key Features</a>
+                        <a href="#how-it-works" class="btn btn-sm btn-outline-secondary rounded-pill px-3">How It Works</a>
+                        <a href="#benefits" class="btn btn-sm btn-outline-secondary rounded-pill px-3">Benefits</a>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Section 1: About the System -->
+            <section id="about-system" class="card p-4 p-md-5 mb-4 border-0 shadow-sm bg-white">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="p-2 bg-primary bg-opacity-10 text-primary rounded-3 me-3">
+                        <i class="bi bi-info-circle-fill fs-4"></i>
+                    </div>
+                    <div>
+                        <span class="text-primary text-uppercase font-monospace small fw-bold tracking-wider">Overview</span>
+                        <h2 class="h3 fw-bold text-navy mb-0">About the System</h2>
+                    </div>
+                </div>
+
+                <div class="card-body p-0 pt-2">
+                    <p class="text-secondary leading-relaxed">
+                        The <strong>Lab Equipment Booking System</strong> is a comprehensive web-based application designed to simplify laboratory equipment reservations across university scientific facilities. In modern research and academic environments, shared instrumentation&mdash;including high-magnification microscopes, spectrophotometers, benchtop centrifuges, oscilloscopes, and heating systems&mdash;represents a major capital investment and a vital resource for undergraduate coursework, postgraduate projects, and faculty research.
+                    </p>
+                    <p class="text-secondary leading-relaxed">
+                        Historically, shared laboratory instruments have been scheduled using manual logbooks, physical whiteboard sign-up sheets, or decentralized email requests. These legacy methods frequently result in scheduling friction, unintentional double-bookings, undocumented usage, and communication delays. The Lab Equipment Booking System replaces these disjointed processes with a centralized, reliable digital reservation platform that connects student researchers and laboratory administrators seamlessly.
+                    </p>
+
+                    <!-- At a Glance Callout Box (Reference Guide pattern) -->
+                    <div class="p-3 p-md-4 rounded-3 border-start border-4 border-primary bg-light mt-4">
+                        <h5 class="fw-bold text-navy mb-2"><i class="bi bi-lightbulb text-warning me-2"></i>System at a Glance</h5>
+                        <ul class="mb-0 text-secondary ps-3 small">
+                            <li class="mb-1"><strong>Centralized Instrument Repository:</strong> An authoritative, real-time catalogue of all operable laboratory instruments with technical specifications and available quantities.</li>
+                            <li class="mb-1"><strong>Structured Booking Requests:</strong> Standardized reservation submissions capturing date, exact time windows, required quantities, and experimental objectives.</li>
+                            <li class="mb-1"><strong>Intelligent Conflict Validation:</strong> Server-side overlap algorithms that verify capacity and prevent overbooking before requests are finalized.</li>
+                            <li><strong>Administrative Oversight:</strong> Dedicated staff review queue enabling faculty supervisors and technicians to verify safety, evaluate scope, and log approval or rejection feedback.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2: Purpose and Objectives -->
+            <section id="purpose-objectives" class="card p-4 p-md-5 mb-4 border-0 shadow-sm bg-white">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="p-2 bg-success bg-opacity-10 text-success rounded-3 me-3">
+                        <i class="bi bi-bullseye fs-4"></i>
+                    </div>
+                    <div>
+                        <span class="text-success text-uppercase font-monospace small fw-bold tracking-wider">Mission &amp; Scope</span>
+                        <h2 class="h3 fw-bold text-navy mb-0">Purpose and Objectives</h2>
+                    </div>
+                </div>
+
+                <div class="card-body p-0 pt-2">
+                    <p class="text-secondary leading-relaxed mb-4">
+                        The core mission of the Lab Equipment Booking System is to provide equitable, transparent, and structured access to shared scientific resources while minimizing administrative overhead for laboratory managers. The system serves two primary stakeholder groups with targeted features:
+                    </p>
+
+                    <div class="row g-4">
+                        <!-- Student Objectives -->
+                        <div class="col-md-6">
+                            <div class="p-4 rounded-3 bg-light border h-100">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="p-2 bg-info bg-opacity-10 text-info rounded-circle me-2">
+                                        <i class="bi bi-mortarboard fs-5"></i>
+                                    </div>
+                                    <h5 class="fw-bold text-navy mb-0">Empowering Students</h5>
+                                </div>
+                                <p class="text-muted small mb-3">
+                                    Enables undergraduate and postgraduate students to independently manage their laboratory practical schedules:
+                                </p>
+                                <ul class="text-secondary small ps-3 mb-0">
+                                    <li class="mb-2"><strong>Browse Inventory:</strong> View instruments, categories, specifications, and operational readiness in real time.</li>
+                                    <li class="mb-2"><strong>Submit Booking Requests:</strong> Select preferred dates and time slots tailored to their practical experiments, thesis studies, or coursework deadlines.</li>
+                                    <li class="mb-2"><strong>Track Reservation Status:</strong> Monitor real-time status progression from Pending through Approved or Rejected with feedback notes.</li>
+                                    <li><strong>Autonomous Cancellation:</strong> Cancel pending reservation requests easily if experiment schedules change.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Staff Objectives -->
+                        <div class="col-md-6">
+                            <div class="p-4 rounded-3 bg-light border h-100">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="p-2 bg-warning bg-opacity-10 text-warning rounded-circle me-2">
+                                        <i class="bi bi-shield-check fs-5 text-dark"></i>
+                                    </div>
+                                    <h5 class="fw-bold text-navy mb-0">Staff Administrative Oversight</h5>
+                                </div>
+                                <p class="text-muted small mb-3">
+                                    Equips laboratory managers, instructors, and technicians with complete administrative governance:
+                                </p>
+                                <ul class="text-secondary small ps-3 mb-0">
+                                    <li class="mb-2"><strong>Inventory Management:</strong> Add new instruments, edit technical parameters, update quantities, and toggle maintenance statuses.</li>
+                                    <li class="mb-2"><strong>Request Evaluation:</strong> Inspect student requests with project justifications and schedule parameters in a unified queue.</li>
+                                    <li class="mb-2"><strong>Approve &amp; Reject Workflows:</strong> Authorize reservations with automatic capacity re-verification or reject with clear, constructive feedback.</li>
+                                    <li><strong>Audit &amp; Traceability:</strong> Safeguard historical booking records by restricting deletion of equipment tied to past reservations.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 3: Key Features -->
+            <section id="key-features" class="card p-4 p-md-5 mb-4 border-0 shadow-sm bg-white">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="p-2 bg-info bg-opacity-10 text-info rounded-3 me-3">
+                        <i class="bi bi-stars fs-4"></i>
+                    </div>
+                    <div>
+                        <span class="text-info text-uppercase font-monospace small fw-bold tracking-wider">Capabilities</span>
+                        <h2 class="h3 fw-bold text-navy mb-0">Key Features</h2>
+                    </div>
+                </div>
+
+                <div class="card-body p-0 pt-2">
+                    <p class="text-secondary leading-relaxed mb-4">
+                        The system provides modular functionality structured around standard laboratory reservation and inventory management workflows:
+                    </p>
+
+                    <div class="row g-4">
+                        <!-- Feature 1: Equipment Management -->
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card h-100 border p-3 card-hover">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="p-2 bg-primary bg-opacity-10 text-primary rounded-3 me-2">
+                                        <i class="bi bi-tools fs-5"></i>
+                                    </div>
+                                    <h5 class="fw-bold text-navy mb-0 fs-6">Equipment Management</h5>
+                                </div>
+                                <p class="text-secondary small mb-0">
+                                    Detailed equipment catalogue supporting multiple scientific categories, technical descriptions, total inventory tracking, and operational statuses (Available, Under Maintenance, Decommissioned).
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Feature 2: Booking Requests -->
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card h-100 border p-3 card-hover">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="p-2 bg-success bg-opacity-10 text-success rounded-3 me-2">
+                                        <i class="bi bi-calendar-plus fs-5"></i>
+                                    </div>
+                                    <h5 class="fw-bold text-navy mb-0 fs-6">Booking Requests</h5>
+                                </div>
+                                <p class="text-secondary small mb-0">
+                                    Interactive student reservation form capturing instrument choice, calendar date, start and end times, requested quantity, and clear academic or research project justification.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Feature 3: Approval and Rejection -->
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card h-100 border p-3 card-hover">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="p-2 bg-warning bg-opacity-10 text-warning rounded-3 me-2">
+                                        <i class="bi bi-check-circle fs-5 text-dark"></i>
+                                    </div>
+                                    <h5 class="fw-bold text-navy mb-0 fs-6">Approval &amp; Rejection</h5>
+                                </div>
+                                <p class="text-secondary small mb-0">
+                                    Dedicated staff management queue to review pending student submissions, authorize valid bookings, or reject requests with explanatory notes visible to students.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Feature 4: Status Tracking -->
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card h-100 border p-3 card-hover">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="p-2 bg-info bg-opacity-10 text-info rounded-3 me-2">
+                                        <i class="bi bi-clock-history fs-5"></i>
+                                    </div>
+                                    <h5 class="fw-bold text-navy mb-0 fs-6">Booking Status Tracking</h5>
+                                </div>
+                                <p class="text-secondary small mb-0">
+                                    Real-time tracking of personal reservation history with distinct status badges (Pending, Approved, Rejected, Cancelled) and detailed review timestamps.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Feature 5: Conflict Prevention -->
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card h-100 border p-3 card-hover">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="p-2 bg-danger bg-opacity-10 text-danger rounded-3 me-2">
+                                        <i class="bi bi-shield-x fs-5"></i>
+                                    </div>
+                                    <h5 class="fw-bold text-navy mb-0 fs-6">Conflict Prevention</h5>
+                                </div>
+                                <p class="text-secondary small mb-0">
+                                    Server-side mathematical interval validation engine preventing double-booking of single-unit devices and computing peak concurrency for multi-unit instruments.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Feature 6: User-Friendly Interface -->
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card h-100 border p-3 card-hover">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="p-2 bg-secondary bg-opacity-10 text-secondary rounded-3 me-2">
+                                        <i class="bi bi-window-sidebar fs-5"></i>
+                                    </div>
+                                    <h5 class="fw-bold text-navy mb-0 fs-6">User-Friendly Interface</h5>
+                                </div>
+                                <p class="text-secondary small mb-0">
+                                    Clean Bootstrap 5 responsive layout, instantaneous search and category filtering, accessible feedback alerts, and confirmation dialogs before destructive actions.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 4: How It Works -->
+            <section id="how-it-works" class="card p-4 p-md-5 mb-4 border-0 shadow-sm bg-white">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="p-2 bg-warning bg-opacity-10 text-warning rounded-3 me-3">
+                        <i class="bi bi-arrow-repeat fs-4 text-dark"></i>
+                    </div>
+                    <div>
+                        <span class="text-warning text-dark text-uppercase font-monospace small fw-bold tracking-wider">Workflow</span>
+                        <h2 class="h3 fw-bold text-navy mb-0">How It Works</h2>
+                    </div>
+                </div>
+
+                <div class="card-body p-0 pt-2">
+                    <p class="text-secondary leading-relaxed mb-4">
+                        The reservation lifecycle follows a clear, five-step structured workflow designed to safeguard laboratory safety, resource availability, and accountability:
+                    </p>
+
+                    <div class="row g-3">
+                        <!-- Step 1 -->
+                        <div class="col-12">
+                            <div class="p-3 p-md-4 rounded-3 bg-light border d-flex gap-3 align-items-start">
+                                <div class="guide-step-num bg-primary text-white shrink-0">1</div>
+                                <div>
+                                    <h5 class="fw-bold text-navy mb-1">Browse Available Equipment</h5>
+                                    <p class="text-secondary small mb-0">
+                                        Students access the Equipment Catalogue to browse registered laboratory instruments. Users can filter by scientific discipline (e.g., Microscopes, Spectrometry, Centrifuges) or perform keyword searches to check operational status and specifications.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="col-12">
+                            <div class="p-3 p-md-4 rounded-3 bg-light border d-flex gap-3 align-items-start">
+                                <div class="guide-step-num bg-info text-white shrink-0">2</div>
+                                <div>
+                                    <h5 class="fw-bold text-navy mb-1">Submit Booking Request</h5>
+                                    <p class="text-secondary small mb-0">
+                                        The student selects an available instrument and fills out the booking form, choosing a future date, desired start and end times, required unit quantity, and project purpose. The system validates time order and constraints in real time before submission.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="col-12">
+                            <div class="p-3 p-md-4 rounded-3 bg-light border d-flex gap-3 align-items-start">
+                                <div class="guide-step-num bg-warning text-dark shrink-0">3</div>
+                                <div>
+                                    <h5 class="fw-bold text-navy mb-1">Staff Review &amp; Evaluation</h5>
+                                    <p class="text-secondary small mb-0">
+                                        Laboratory staff members view incoming requests in the Pending Approvals queue. Staff members inspect student credentials, intended experiment duration, and required instruments to verify adherence to laboratory safety protocols.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 4 -->
+                        <div class="col-12">
+                            <div class="p-3 p-md-4 rounded-3 bg-light border d-flex gap-3 align-items-start">
+                                <div class="guide-step-num bg-success text-white shrink-0">4</div>
+                                <div>
+                                    <h5 class="fw-bold text-navy mb-1">Approval or Rejection Decision</h5>
+                                    <p class="text-secondary small mb-0">
+                                        The staff member either approves the reservation (with automated capacity re-verification to prevent concurrent overbooking) or rejects it with an explanatory comment to help the student adjust their request.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 5 -->
+                        <div class="col-12">
+                            <div class="p-3 p-md-4 rounded-3 bg-light border d-flex gap-3 align-items-start">
+                                <div class="guide-step-num bg-navy text-white shrink-0">5</div>
+                                <div>
+                                    <h5 class="fw-bold text-navy mb-1">Status Tracking &amp; Laboratory Access</h5>
+                                    <p class="text-secondary small mb-0">
+                                        Students monitor their request status on their personal dashboard. Once marked Approved, the student accesses the laboratory at the reserved time slot with confirmed access to the instrument.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 5: Benefits -->
+            <section id="benefits" class="card p-4 p-md-5 mb-4 border-0 shadow-sm bg-white">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="p-2 bg-success bg-opacity-10 text-success rounded-3 me-3">
+                        <i class="bi bi-award fs-4"></i>
+                    </div>
+                    <div>
+                        <span class="text-success text-uppercase font-monospace small fw-bold tracking-wider">Impact &amp; Advantages</span>
+                        <h2 class="h3 fw-bold text-navy mb-0">System Benefits</h2>
+                    </div>
+                </div>
+
+                <div class="card-body p-0 pt-2">
+                    <p class="text-secondary leading-relaxed mb-4">
+                        Adopting an automated, web-based booking architecture delivers measurable operational advantages for academic departments, researchers, and technical staff:
+                    </p>
+
+                    <div class="row g-4">
+                        <!-- Benefit 1: Improved Equipment Utilization -->
+                        <div class="col-md-6">
+                            <div class="p-4 rounded-3 bg-light border-start border-4 border-primary h-100">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="bi bi-graph-up-arrow text-primary fs-4 me-2"></i>
+                                    <h5 class="fw-bold text-navy mb-0">Improved Equipment Utilization</h5>
+                                </div>
+                                <p class="text-secondary small mb-0">
+                                    Maximizes return on institutional investment by giving visibility into available time slots across all laboratory instruments, reducing idle time, and facilitating equitable scheduling between coursework and research projects.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Benefit 2: Reduced Booking Conflicts -->
+                        <div class="col-md-6">
+                            <div class="p-4 rounded-3 bg-light border-start border-4 border-success h-100">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="bi bi-shield-check text-success fs-4 me-2"></i>
+                                    <h5 class="fw-bold text-navy mb-0">Reduced Booking Conflicts</h5>
+                                </div>
+                                <p class="text-secondary small mb-0">
+                                    Eliminates double-booking errors and scheduling disputes through automated time-window overlap validation. Multi-unit resources calculate peak concurrency to guarantee equipment availability.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Benefit 3: Efficient Administration -->
+                        <div class="col-md-6">
+                            <div class="p-4 rounded-3 bg-light border-start border-4 border-warning h-100">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="bi bi-speedometer2 text-warning fs-4 me-2"></i>
+                                    <h5 class="fw-bold text-navy mb-0">Efficient Administration</h5>
+                                </div>
+                                <p class="text-secondary small mb-0">
+                                    Replaces cumbersome paper logs and back-and-forth email correspondence with an organized administrative dashboard. Laboratory staff can review, approve, or reject student requests in seconds.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Benefit 4: Better Organization of Resources -->
+                        <div class="col-md-6">
+                            <div class="p-4 rounded-3 bg-light border-start border-4 border-info h-100">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="bi bi-diagram-3 text-info fs-4 me-2"></i>
+                                    <h5 class="fw-bold text-navy mb-0">Better Organization of Laboratory Resources</h5>
+                                </div>
+                                <p class="text-secondary small mb-0">
+                                    Maintains complete historical audit trails, tracks maintenance lifecycles, and ensures equipment cannot be inadvertently removed if historical reservation data depends on it.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Call to Action Banner -->
+            <div class="card p-4 p-md-5 border-0 shadow-sm bg-navy text-white text-center">
+                <h3 class="fw-bold mb-2">Ready to Get Started?</h3>
+                <p class="text-white-50 mb-4 mx-auto" style="max-width: 650px;">
+                    Explore our catalogue of scientific laboratory equipment or sign in with your university account to submit and manage reservation requests.
+                </p>
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    <a href="{{ url_for('equipment.catalogue') }}" class="btn btn-warning text-dark fw-semibold px-4 py-2">
+                        <i class="bi bi-grid me-1"></i> Browse Equipment Catalogue
+                    </a>
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline-light px-4 py-2">
+                            <i class="bi bi-speedometer2 me-1"></i> Go to Dashboard
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light px-4 py-2">
+                            <i class="bi bi-box-arrow-in-right me-1"></i> Sign In to Book
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

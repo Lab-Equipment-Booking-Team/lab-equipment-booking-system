@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}Book Laboratory Equipment - Student Portal{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <nav aria-label="breadcrumb" class="mb-3">
+                <ol class="breadcrumb small">
+                    <li class="breadcrumb-item"><a href="{{ url_for('student.dashboard') }}">Student Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">New Booking Request</li>
+                </ol>
+            </nav>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4 p-md-5">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="p-3 bg-primary bg-opacity-10 text-primary rounded-circle me-3">
+                            <i class="bi bi-calendar-plus fs-3"></i>
+                        </div>
+                        <div>
+                            <h3 class="fw-bold text-navy mb-0">Reserve Laboratory Equipment</h3>
+                            <p class="text-muted small mb-0">Submit a reservation request for staff review and approval.</p>
+                        </div>
+                    </div>
+
+                    <div id="timeValidationAlert" class="alert alert-danger d-none" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <span>The start time must be strictly earlier than the end time.</span>
+                    </div>
+
+                    <div id="availabilityBadge" class="alert d-none py-2 px-3 mb-3 small" role="alert"></div>
+
+                    <form id="bookingForm" method="POST" action="{{ url_for('student.create_booking') }}">
+                        <!-- Equipment Selection -->
+                        <div class="mb-3">
+                            <label for="equipment_id" class="form-label">Select Laboratory Equipment <span class="text-danger">*</span></label>
+                            <select class="form-select" id="equipment_id" name="equipment_id" required>
+                                <option value="" disabled {% if not selected_equipment_id %}selected{% endif %}>-- Choose an Available Instrument --</option>
+                                {% for eq in equipment_list %}
+                                    <option value="{{ eq.id }}" {% if selected_equipment_id == eq.id %}selected{% endif %}>
+                                        {{ eq.name }} ({{ eq.code }}) - Category: {{ eq.category }} [{{ eq.quantity_available }} units available]
+                                    </option>
+                                {% endfor %}
+                            </select>
+                            <div class="form-text small">Only operational instruments in "Available" status can be booked.</div>
+                        </div>
+
+                        <!-- Date Selection -->
+                        <div class="mb-3">
+                            <label for="booking_date" class="form-label">Booking Date <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-calendar-event"></i></span>
+                                <input type="date" class="form-control min-today" id="booking_date" name="booking_date" value="{{ date_str or '' }}" required>
+                            </div>
+                            <div class="form-text small">Past booking dates are strictly prohibited by university policy.</div>
+                        </div>
+
+                        <!-- Time Slot -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label for="start_time" class="form-label">Start Time <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="bi bi-clock"></i></span>
+                                    <input type="time" class="form-control" id="start_time" name="start_time" value="{{ start_time_str or '' }}" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="end_time" class="form-label">End Time <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="bi bi-clock-history"></i></span>
+                                    <input type="time" class="form-control" id="end_time" name="end_time" value="{{ end_time_str or '' }}" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quantity -->
+                        <div class="mb-3">
+                            <label for="quantity" class="form-label">Requested Quantity <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-boxes"></i></span>
+                                <input type="number" class="form-control" id="quantity" name="quantity" min="1" max="100" value="{{ quantity or 1 }}" required>
+                            </div>
+                            <div class="form-text small">Must be a positive integer not exceeding total available instrument stock.</div>
+                        </div>
+
+                        <!-- Purpose -->
+                        <div class="mb-4">
+                            <label for="purpose" class="form-label">Purpose or Coursework Justification <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="purpose" name="purpose" rows="3" required placeholder="Detail the practical experiment, module code, or research purpose for this equipment...">{{ purpose or '' }}</textarea>
+                            <div class="form-text small">Laboratory staff evaluate requests based on project justification and resource capacity.</div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                            <a href="{{ url_for('student.dashboard') }}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-1"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary px-4 fw-semibold">
+                                <i class="bi bi-send me-1"></i> Submit Booking Request
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

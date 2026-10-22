@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Equipment - Staff Administration{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-lg-5 py-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <div>
+            <h2 class="fw-bold text-navy mb-1"><i class="bi bi-tools text-primary me-2"></i>Laboratory Equipment Inventory</h2>
+            <p class="text-muted mb-0">Add, edit, manage status, and monitor reservation activity for laboratory instruments.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{{ url_for('staff.dashboard') }}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i> Dashboard
+            </a>
+            <a href="{{ url_for('staff.add_equipment') }}" class="btn btn-primary fw-semibold">
+                <i class="bi bi-plus-lg me-1"></i> Add New Equipment
+            </a>
+        </div>
+    </div>
+
+    {% if equipment_list %}
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Instrument Name</th>
+                                <th>Category</th>
+                                <th>Available Qty</th>
+                                <th>Status</th>
+                                <th>Bookings</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for eq in equipment_list %}
+                                <tr>
+                                    <td><code>{{ eq.code }}</code></td>
+                                    <td>
+                                        <div class="fw-bold text-navy">{{ eq.name }}</div>
+                                        <div class="text-muted small text-truncate" style="max-width: 250px;">
+                                            {{ eq.description or 'No specifications entered.' }}
+                                        </div>
+                                    </td>
+                                    <td><span class="badge bg-light text-secondary border">{{ eq.category }}</span></td>
+                                    <td><span class="badge bg-light text-dark border fs-6 px-3 py-1">{{ eq.quantity_available }}</span></td>
+                                    <td>
+                                        {% if eq.status == 'Available' %}
+                                            <span class="badge badge-status-available"><i class="bi bi-check-circle me-1"></i>Available</span>
+                                        {% elif eq.status == 'Under Maintenance' %}
+                                            <span class="badge badge-status-maintenance"><i class="bi bi-wrench me-1"></i>Under Maintenance</span>
+                                        {% else %}
+                                            <span class="badge badge-status-decommissioned"><i class="bi bi-slash-circle me-1"></i>Decommissioned</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="badge {{ 'bg-primary' if eq.bookings|length > 0 else 'bg-secondary' }}">
+                                            {{ eq.bookings|length }} record(s)
+                                        </span>
+                                    </td>
+                                    <td class="text-end">
+                                        <div class="d-inline-flex gap-2">
+                                            <a href="{{ url_for('staff.edit_equipment', equipment_id=eq.id) }}" class="btn btn-sm btn-outline-primary" title="Edit Equipment">
+                                                <i class="bi bi-pencil me-1"></i>Edit
+                                            </a>
+
+                                            <form method="POST" action="{{ url_for('staff.delete_equipment', equipment_id=eq.id) }}">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" 
+                                                    data-confirm="Are you sure you want to delete '{{ eq.name }}'? Deletion will be rejected if existing booking records exist."
+                                                    title="Delete Equipment">
+                                                    <i class="bi bi-trash me-1"></i>Delete
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <i class="bi bi-box-seam empty-state-icon"></i>
+            <h5 class="fw-bold">No Equipment Registered</h5>
+            <p class="text-muted">Start by adding your laboratory's first piece of equipment.</p>
+            <a href="{{ url_for('staff.add_equipment') }}" class="btn btn-primary btn-sm">Add Equipment</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

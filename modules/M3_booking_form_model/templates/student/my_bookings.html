@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}My Bookings - Student Portal{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-lg-5 py-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <div>
+            <h2 class="fw-bold text-navy mb-1"><i class="bi bi-calendar-check text-primary me-2"></i>My Equipment Reservations</h2>
+            <p class="text-muted mb-0">Track real-time approval status and historical laboratory reservations.</p>
+        </div>
+        <a href="{{ url_for('student.create_booking') }}" class="btn btn-primary fw-semibold">
+            <i class="bi bi-plus-lg me-1"></i> New Booking Request
+        </a>
+    </div>
+
+    <!-- Status Filter Pills -->
+    <div class="d-flex flex-wrap gap-2 mb-4">
+        <a href="{{ url_for('student.my_bookings') }}" class="btn btn-sm {{ 'btn-navy bg-navy text-white' if not selected_status else 'btn-outline-secondary' }}">
+            All Requests ({{ bookings|length if not selected_status else 'View All' }})
+        </a>
+        {% for st in statuses %}
+            <a href="{{ url_for('student.my_bookings', status=st) }}" class="btn btn-sm {{ 'btn-navy bg-navy text-white' if selected_status == st else 'btn-outline-secondary' }}">
+                {{ st }}
+            </a>
+        {% endfor %}
+    </div>
+
+    <!-- Bookings Table -->
+    {% if bookings %}
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Booking Ref</th>
+                                <th>Equipment</th>
+                                <th>Scheduled Date &amp; Time</th>
+                                <th>Qty</th>
+                                <th>Purpose / Details</th>
+                                <th>Status</th>
+                                <th>Review Notes</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for b in bookings %}
+                                <tr>
+                                    <td>
+                                        <span class="fw-bold text-navy">#{{ b.id }}</span>
+                                        <div class="text-muted small">{{ b.created_at.strftime('%b %d, %Y') }}</div>
+                                    </td>
+                                    <td>
+                                        <div class="fw-bold text-navy">{{ b.equipment.name }}</div>
+                                        <span class="badge bg-light text-secondary border"><code>{{ b.equipment.code }}</code></span>
+                                        <small class="text-muted ms-1">{{ b.equipment.category }}</small>
+                                    </td>
+                                    <td>
+                                        <div class="fw-semibold"><i class="bi bi-calendar3 me-1 text-primary"></i>{{ b.booking_date.strftime('%Y-%m-%d') }}</div>
+                                        <small class="text-muted"><i class="bi bi-clock me-1"></i>{{ b.start_time.strftime('%H:%M') }} &ndash; {{ b.end_time.strftime('%H:%M') }}</small>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-light text-dark border fs-6">{{ b.quantity }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="d-inline-block text-truncate" style="max-width: 250px;" title="{{ b.purpose }}">
+                                            {{ b.purpose }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {% if b.status == 'Pending' %}
+                                            <span class="badge badge-status-pending px-3 py-2"><i class="bi bi-hourglass me-1"></i>Pending</span>
+                                        {% elif b.status == 'Approved' %}
+                                            <span class="badge badge-status-approved px-3 py-2"><i class="bi bi-check2-circle me-1"></i>Approved</span>
+                                        {% elif b.status == 'Rejected' %}
+                                            <span class="badge badge-status-rejected px-3 py-2"><i class="bi bi-x-circle me-1"></i>Rejected</span>
+                                        {% else %}
+                                            <span class="badge badge-status-cancelled px-3 py-2"><i class="bi bi-dash-circle me-1"></i>Cancelled</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if b.status == 'Approved' %}
+                                            <small class="text-success d-block"><i class="bi bi-person-check me-1"></i>Approved by {{ b.reviewer.full_name if b.reviewer else 'Staff' }}</small>
+                                            <small class="text-muted">{{ b.reviewed_at.strftime('%b %d, %H:%M') if b.reviewed_at else '' }}</small>
+                                        {% elif b.status == 'Rejected' %}
+                                            <small class="text-danger d-block"><strong>Reason:</strong> {{ b.rejection_reason or 'No reason specified' }}</small>
+                                            <small class="text-muted">Reviewed by {{ b.reviewer.full_name if b.reviewer else 'Staff' }}</small>
+                                        {% else %}
+                                            <span class="text-muted small">&mdash;</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if b.is_pending %}
+                                            <form method="POST" action="{{ url_for('student.cancel_booking', booking_id=b.id) }}">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" data-confirm="Are you sure you want to cancel booking request #{{ b.id }}?">
+                                                    <i class="bi bi-x-circle me-1"></i>Cancel
+                                                </button>
+                                            </form>
+                                        {% else %}
+                                            <span class="text-muted small">&mdash;</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <i class="bi bi-journal-x empty-state-icon"></i>
+            <h5 class="fw-bold">No Bookings Found</h5>
+            <p class="text-muted">No reservations correspond to the selected filter criteria.</p>
+            <a href="{{ url_for('student.create_booking') }}" class="btn btn-primary btn-sm">Create a New Booking</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
