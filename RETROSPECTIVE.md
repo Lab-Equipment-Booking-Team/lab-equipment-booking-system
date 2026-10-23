@@ -82,12 +82,4 @@
 
 ---
 
-## 7. Team Review Sign-Off
 
-| Name | Role | Signature / Review Date |
-|---|---|---|
-| **Pawani** | Overall Team Leader & Module M5 Lead | `[Pending Review]` |
-| **Prabhashi** | Review Lead & Module M1 Lead | `[Pending Review]` |
-| **Shashinika** | Coordinator & Module M2 Lead | `[Pending Review]` |
-| **Imasha** | GitHub / CI Lead & Module M3 Lead | `[Pending Review]` |
-| **Hashini** | QA Lead & Module M4 Lead | `[Pending Review]` |
