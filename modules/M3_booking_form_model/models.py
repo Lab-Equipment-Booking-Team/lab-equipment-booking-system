@@ -200,5 +200,15 @@ class Booking(db.Model):
         """Cancel a pending booking request by student."""
         self.status = self.STATUS_CANCELLED
 
+    def auto_reject(self, reason: str) -> None:
+        """System-level rejection for invalid booking submissions.
+
+        Used when server-side validation fails but enough data exists to persist
+        the record.  No staff reviewer is set because the rejection is automatic.
+        """
+        self.status = self.STATUS_REJECTED
+        self.rejection_reason = reason.strip() if reason else "Booking failed validation."
+        # reviewed_by_id and reviewed_at remain None (no human reviewer involved)
+
     def __repr__(self) -> str:
         return f"<Booking #{self.id} {self.status} (Eq: {self.equipment_id})>"

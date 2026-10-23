@@ -64,8 +64,16 @@ def create_student_booking(
 ) -> tuple[Booking | None, str | None]:
     """Validate and create a new student equipment booking request.
 
-    Uses Module M4 (Booking Validation) to enforce all business constraints
-    and initialises the status to 'Pending' staff review.
+    Uses Module M4 (Booking Validation) to enforce all business constraints.
+
+    * If all fields are valid  → saves booking with status ``Pending``.
+    * If validation fails AND enough data exists to build a DB record
+      (valid equipment FK, parseable date/times) → saves the booking with
+      status ``Rejected`` and the error as ``rejection_reason``, then returns
+      ``(rejected_booking, error_msg)`` so the caller can surface both the
+      persisted record and the reason to the student.
+    * If core fields are missing/unparseable → returns ``(None, error_msg)``
+      without touching the database (cannot satisfy NOT NULL / FK constraints).
     """
     equipment = db.session.get(Equipment, equipment_id) if equipment_id else None
     b_date = parse_date(date_str)
@@ -83,6 +91,31 @@ def create_student_booking(
     )
 
     if not is_valid:
+        # Persist the rejected record only when we have the required FK data.
+        # Missing/unparseable equipment, date, or times make DB insert impossible.
+        can_persist = (
+            equipment is not None
+            and b_date is not None
+            and s_time is not None
+            and e_time is not None
+        )
+        if can_persist:
+            safe_qty = quantity if isinstance(quantity, int) and quantity > 0 else 1
+            rejected_booking = Booking(
+                user_id=user_id,
+                equipment_id=equipment.id,
+                booking_date=b_date,
+                start_time=s_time,
+                end_time=e_time,
+                quantity=safe_qty,
+                purpose=purpose.strip() if purpose else "Not provided",
+                status=Booking.STATUS_REJECTED,
+            )
+            rejected_booking.auto_reject(error_msg)
+            db.session.add(rejected_booking)
+            db.session.commit()
+            return rejected_booking, error_msg
+        # Not enough data to build a record — surface the error on the form only.
         return None, error_msg
 
     new_booking = Booking(

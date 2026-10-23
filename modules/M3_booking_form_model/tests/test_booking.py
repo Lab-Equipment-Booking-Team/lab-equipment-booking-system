@@ -36,7 +36,7 @@ def test_student_submit_valid_booking_request(client, student_user, sample_equip
 
 
 def test_reject_past_booking_date(client, student_user, sample_equipment):
-    """Test that booking dates in the past are strictly rejected."""
+    """Test that booking dates in the past are persisted as Rejected with a reason."""
     login_client(client, student_user.username, "StudentSecret123!")
 
     past_date = date.today() - timedelta(days=2)
@@ -55,7 +55,13 @@ def test_reject_past_booking_date(client, student_user, sample_equipment):
     )
     assert response.status_code == 200
     assert b"cannot be in the past" in response.data
-    assert Booking.query.count() == 0
+
+    # Booking is now persisted as Rejected (not silently dropped).
+    booking = Booking.query.filter_by(user_id=student_user.id).first()
+    assert booking is not None
+    assert booking.status == Booking.STATUS_REJECTED
+    assert booking.rejection_reason is not None
+    assert "past" in booking.rejection_reason.lower()
 
 
 def test_reject_start_time_after_or_equal_end_time(client, student_user, sample_equipment):
@@ -93,7 +99,11 @@ def test_reject_start_time_after_or_equal_end_time(client, student_user, sample_
         follow_redirects=True,
     )
     assert b"must be strictly earlier than the end time" in resp_inverted.data
-    assert Booking.query.count() == 0
+
+    # Both invalid submissions are persisted as Rejected records.
+    rejected = Booking.query.filter_by(status=Booking.STATUS_REJECTED).all()
+    assert len(rejected) == 2
+    assert all(b.rejection_reason is not None for b in rejected)
 
 
 def test_reject_booking_on_maintenance_equipment(client, student_user, maintenance_equipment):
@@ -115,7 +125,13 @@ def test_reject_booking_on_maintenance_equipment(client, student_user, maintenan
         follow_redirects=True,
     )
     assert b"currently under maintenance and cannot be booked" in response.data
-    assert Booking.query.count() == 0
+
+    # Booking is persisted as Rejected — equipment FK is valid even under maintenance.
+    booking = Booking.query.filter_by(user_id=student_user.id).first()
+    assert booking is not None
+    assert booking.status == Booking.STATUS_REJECTED
+    assert booking.rejection_reason is not None
+    assert "maintenance" in booking.rejection_reason.lower()
 
 
 def test_reject_invalid_quantity(client, student_user, sample_equipment):
@@ -202,3 +218,59 @@ def test_student_cannot_cancel_approved_booking(client, student_user, sample_equ
 
     db.session.refresh(booking)
     assert booking.status == Booking.STATUS_APPROVED
+
+
+# ---------------------------------------------------------------------------
+# Auto-rejection persistence tests (new behaviour)
+# ---------------------------------------------------------------------------
+
+
+def test_auto_reject_persists_rejected_record_for_past_date(
+    app, student_user, sample_equipment
+):
+    """Directly test create_student_booking: past date → Rejected record in DB."""
+    from modules.M3_booking_form_model.service import create_student_booking
+
+    past_date = date.today() - timedelta(days=1)
+
+    with app.app_context():
+        booking, error = create_student_booking(
+            user_id=student_user.id,
+            equipment_id=sample_equipment.id,
+            date_str=past_date.strftime("%Y-%m-%d"),
+            start_time_str="10:00",
+            end_time_str="12:00",
+            quantity=1,
+            purpose="Service-level past date test",
+        )
+        # Assertions must be inside the context so the session is still active.
+        assert error is not None, "Expected an error message for past date"
+        assert booking is not None, "Expected a persisted Rejected booking record"
+        assert booking.id is not None
+        assert booking.status == Booking.STATUS_REJECTED
+        assert booking.rejection_reason is not None
+        assert booking.reviewed_by_id is None  # System rejection — no staff reviewer
+
+
+
+def test_auto_reject_booking_model_method(sample_equipment, student_user):
+    """Unit test: Booking.auto_reject() sets status, reason, and leaves reviewer None."""
+    from datetime import date as _date
+    from datetime import time as _time
+
+    b = Booking(
+        user_id=student_user.id,
+        equipment_id=sample_equipment.id,
+        booking_date=_date.today(),
+        start_time=_time(9, 0),
+        end_time=_time(11, 0),
+        quantity=1,
+        purpose="Unit test for auto_reject",
+        status=Booking.STATUS_PENDING,
+    )
+    b.auto_reject("Time slot conflict with an existing approved booking.")
+
+    assert b.status == Booking.STATUS_REJECTED
+    assert "conflict" in b.rejection_reason.lower()
+    assert b.reviewed_by_id is None
+    assert b.reviewed_at is None
